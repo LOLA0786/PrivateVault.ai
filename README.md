@@ -1,3 +1,9 @@
+![CI](https://github.com/LOLA0786/PrivateVault.ai/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.11-blue)
+![License](https://img.shields.io/badge/license-Apache%202.0-green)
+![Tests](https://img.shields.io/badge/tests-89%20passing-brightgreen)
+
+
  # PrivateVault
 
 **Runtime Governance Infrastructure for AI Systems**
