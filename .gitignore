@@ -7,3 +7,4 @@ dump.rdb
 privatevault-key.pem
 test_reports/
 *.bak
+.env
