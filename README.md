@@ -57,6 +57,32 @@ Key properties:
 * cryptographic audit trails
 * modular governance policies
 
+
+
+
+
+                CONTROL PLANE
+              (admin / policy UI)
+                       │
+                       │
+                GOVERNANCE BRAIN
+           (policy_engine / approvals)
+                       │
+                       │
+              AGENT EXECUTION LAYER
+      (multi_agent_workflow / agent_runner)
+                       │
+         ┌─────────────┼─────────────┐
+         │             │             │
+     Tool Calls    Other Agents   External APIs
+                       │
+                       │
+                 EVIDENCE LAYER
+        (audit_logger / decision_ledger / merkle)
+                       │
+                       │
+                   RISK ENGINE
+             (ppo_router / ml_risk_model)
 ---
 
 # Core Capabilities
