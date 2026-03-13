@@ -101,7 +101,7 @@ async def single_wire_audit(intent, context, nonce):
         "intent": normalized,
         "decision": shadow,
         "user_id": context["user_id"],
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
     tx_id = await ledger.submit_audit(normalized, shadow, context["user_id"])

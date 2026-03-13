@@ -105,7 +105,7 @@ else:
 st.markdown(
     f"""
     <div style='text-align:center;color:gray;'>
-        <p>Last updated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}</p>
+        <p>Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}</p>
         <p>© 2025 PrivateVault Labs • Internal test dashboard • No real data stored</p>
     </div>
     """,

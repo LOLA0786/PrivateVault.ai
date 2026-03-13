@@ -20,7 +20,7 @@ class OFACAPI:
             "match": True,
             "confidence": 95,
             "sanctions_list": "OFAC_SDN",
-            "last_updated": (datetime.utcnow() - timedelta(minutes=5)).isoformat()
+            "last_updated": (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()
             + "Z",
             "source": "treasury.gov/ofac",
         }
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     evidence = {
         "external_api": response,
         "policy": policy_decision,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
     }
 
     print("\n--- EVIDENCE HASH ---")

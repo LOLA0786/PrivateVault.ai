@@ -1,3 +1,4 @@
+from datetime import timezone
 from pathlib import Path
 from datetime import datetime
 import shutil
@@ -13,7 +14,7 @@ def archive_policy(policy_name: str):
     if not src.exists():
         return None
 
-    ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     archived_name = f"{policy_name.replace('.yaml','')}-{ts}.yaml"
     dst = ARCHIVE_DIR / archived_name
 

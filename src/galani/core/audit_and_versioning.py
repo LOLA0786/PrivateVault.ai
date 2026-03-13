@@ -22,7 +22,7 @@ def write_audit_log(
     reason: str,
 ):
     entry = {
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "decision_id": decision_id,
         "policy_version": POLICY_VERSION,
         "principal": principal,

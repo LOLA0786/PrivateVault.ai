@@ -23,7 +23,7 @@ def register_policy(version: str, policy: dict, active=False):
     policies = load_policies()
     policies[version] = {
         "policy": policy,
-        "created_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
         "active": active,
     }
     save_policies(policies)

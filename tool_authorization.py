@@ -62,8 +62,8 @@ class ToolAuthorization:
             "params_hash": hashlib.sha256(
                 json.dumps(parameters, sort_keys=True).encode()
             ).hexdigest(),
-            "timestamp": datetime.utcnow().isoformat(),
-            "exp": datetime.utcnow() + timedelta(minutes=5),  # 5 min expiry
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=5),  # 5 min expiry
         }
 
         token = jwt.encode(payload, self.secret_key, algorithm="HS256")
@@ -107,7 +107,7 @@ class ToolAuthorization:
             "executed": False,
             "signature": None,
             "result": None,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
         # Check authorization

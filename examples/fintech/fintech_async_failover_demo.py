@@ -13,7 +13,7 @@ def h(data):
 
 
 def now():
-    return datetime.utcnow().isoformat() + "Z"
+    return datetime.now(timezone.utc).isoformat() + "Z"
 
 
 # -----------------------------
@@ -25,7 +25,7 @@ async def ofac_check(name, country):
         "feed": "OFAC",
         "match": True,
         "confidence": 95,
-        "last_updated": (datetime.utcnow() - timedelta(minutes=5)).isoformat() + "Z",
+        "last_updated": (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat() + "Z",
     }
 
 

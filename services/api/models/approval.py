@@ -1,3 +1,4 @@
+from datetime import timezone
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
@@ -8,4 +9,4 @@ class ApprovalRecord(BaseModel):
     action: str
     status: str
     approver: Optional[str] = None
-    created_at: str = datetime.utcnow().isoformat()
+    created_at: str = datetime.now(timezone.utc).isoformat()

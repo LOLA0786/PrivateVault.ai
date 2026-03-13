@@ -131,7 +131,7 @@ class AIFirewall:
             "original_prompt": prompt,
             "filtered_prompt": prompt,
             "metadata": metadata or {},
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "threat_detected": False,
             "threat_reason": "",
         }
@@ -158,7 +158,7 @@ class AIFirewall:
             "original_response": response,
             "filtered_response": response,
             "pii_found": [],
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
         if not self.config["output_protection"]["enabled"]:

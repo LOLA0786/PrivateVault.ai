@@ -38,7 +38,7 @@ def main_case():
     payload = {
         "intent": intent,
         "policy": policy,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
     print("\n--- INTENT ---")

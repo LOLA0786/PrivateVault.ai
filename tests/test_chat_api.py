@@ -8,7 +8,7 @@ def test_chat_respond_blocked():
     r = client.post(
         "/api/v1/chat/respond",
         headers={"X-API-Key": "test"},
-        json={"request_id": "req_1001"},
+        json={"request_id": "req_1001", "message": "email@example.com"},
     )
 
     assert r.status_code == 200

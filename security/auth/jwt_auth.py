@@ -37,8 +37,8 @@ class AuthManager:
             "user_id": user_id,
             "agent_id": agent_id,
             "permissions": permissions,
-            "exp": datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),
-            "iat": datetime.utcnow(),
+            "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS),
+            "iat": datetime.now(timezone.utc),
         }
 
         token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)

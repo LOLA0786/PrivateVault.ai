@@ -1,3 +1,4 @@
+from datetime import timezone
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 from datetime import datetime
@@ -14,4 +15,4 @@ class EvidenceExportResponse(BaseModel):
     export_id: str
     status: str
     download_url: Optional[str] = None
-    created_at: str = datetime.utcnow().isoformat()
+    created_at: str = datetime.now(timezone.utc).isoformat()

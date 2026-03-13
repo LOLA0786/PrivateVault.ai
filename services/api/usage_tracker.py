@@ -1,3 +1,4 @@
+from datetime import timezone
 from collections import defaultdict
 from datetime import datetime
 
@@ -8,7 +9,7 @@ def record_usage(api_key: str, tenant_id: str, path: str, status: int):
         "tenant_id": tenant_id,
         "path": path,
         "status": status,
-        "ts": datetime.utcnow().isoformat(),
+        "ts": datetime.now(timezone.utc).isoformat(),
     })
 
 def get_usage(api_key: str):

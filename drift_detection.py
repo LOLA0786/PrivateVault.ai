@@ -119,7 +119,7 @@ class DriftDetector:
             "threshold": self.threshold,
             "should_block": False,
             "reason": "",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
         # Calculate alignment

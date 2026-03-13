@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 from services.api.governance.policy_loader import get_policy
 
@@ -17,6 +18,9 @@ def evaluate_policy(message: str, tenant_id: str = "default"):
     rules = policy.get("rules", [])
 
     for rule in rules:
+        if re.search(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}", message):
+            return {"decision": "BLOCK", "policy_id": "GDPR_PII_RESTRICTION"}
+
         keywords = rule.get("match", {}).get("keywords", [])
         for kw in keywords:
             if kw.lower() in message.lower():

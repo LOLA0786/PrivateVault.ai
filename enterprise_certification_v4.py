@@ -112,14 +112,14 @@ print("Drift Control                  ", "PASS" if drift_pass else "FAIL")
 print("Ledger Integrity               ", "PASS" if ledger_pass else "FAIL")
 
 cert_report = {
-    "timestamp": datetime.utcnow().isoformat(),
+    "timestamp": datetime.now(timezone.utc).isoformat(),
     "security": security_pass,
     "deterministic_enforcement": deterministic_pass,
     "drift_control": drift_pass,
     "ledger_integrity": ledger_pass,
 }
 
-filename = f"enterprise_cert_v4_{int(datetime.utcnow().timestamp())}.json"
+filename = f"enterprise_cert_v4_{int(datetime.now(timezone.utc).timestamp())}.json"
 
 with open(filename, "w") as f:
     json.dump(cert_report, f, indent=2)

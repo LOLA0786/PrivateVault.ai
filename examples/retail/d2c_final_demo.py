@@ -11,7 +11,7 @@ def h(x):
 
 
 def now():
-    return datetime.utcnow().isoformat() + "Z"
+    return datetime.now(timezone.utc).isoformat() + "Z"
 
 
 def section(title):

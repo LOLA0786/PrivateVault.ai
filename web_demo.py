@@ -73,7 +73,7 @@ def analyze():
     if executed: execution_count+=1
     else: blocked_count+=1
     
-    entry = {'timestamp':datetime.utcnow().isoformat(),'prompt':prompt,'risk_score':risk,
+    entry = {'timestamp':datetime.now(timezone.utc).isoformat(),'prompt':prompt,'risk_score':risk,
              'risk_factors':factors,'decision':decision,'executed':executed,
              'audit_hash':hashlib.sha256(f"{prompt}{risk}".encode()).hexdigest()[:16]}
     audit_log.append(entry)

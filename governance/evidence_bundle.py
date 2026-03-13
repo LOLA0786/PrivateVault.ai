@@ -19,7 +19,7 @@ def build_evidence_bundle(
         "policy_rule": policy_rule,
         "risk_score": risk_score,
         "jurisdiction": jurisdiction or authority.jurisdiction,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "override": override,
         "crypto_proof": crypto_proof,
     }

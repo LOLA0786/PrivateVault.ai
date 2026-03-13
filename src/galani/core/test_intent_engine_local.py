@@ -23,7 +23,7 @@ def ingest_intent():
             "beneficiary": "new",
         },
         "confidence": 0.42,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
     r = requests.post(f"{BASE_URL}/intent/ingest", json=payload)
@@ -36,7 +36,7 @@ def add_event(strength):
         "intent_id": "test_user_intent_001",
         "event_type": "reinforcement",
         "strength": strength,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
     r = requests.post(f"{BASE_URL}/intent/event", json=payload)

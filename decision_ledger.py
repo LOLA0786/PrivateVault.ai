@@ -24,7 +24,7 @@ GENESIS_HASH = "0" * 64
 
 
 def utc_now_iso() -> str:
-    return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat() + "Z"
 
 
 class DecisionLedger:

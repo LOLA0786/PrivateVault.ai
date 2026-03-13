@@ -1,3 +1,4 @@
+from datetime import timezone
 import yaml
 from pathlib import Path
 from datetime import datetime
@@ -40,7 +41,7 @@ def record_policy_change(old_policy: str, new_policy: str):
     ).to_dict()
 
     record = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
         "old_policy": old_policy,
         "new_policy": new_policy,
         "diff": diff,

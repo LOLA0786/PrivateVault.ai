@@ -13,6 +13,6 @@ def issue_override(
         approvers=approvers,
         justification=justification,
         mode=mode,
-        issued_at=datetime.utcnow(),
-        expires_at=datetime.utcnow() + timedelta(minutes=ttl_minutes)
+        issued_at=datetime.now(timezone.utc),
+        expires_at=datetime.now(timezone.utc) + timedelta(minutes=ttl_minutes)
     )

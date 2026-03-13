@@ -1,3 +1,4 @@
+from datetime import timezone
 from datetime import datetime
 from typing import Any, Dict
 
@@ -45,7 +46,7 @@ def enforce(
         "shadow": mode in ("monitor", "shadow"),
         "would_have_blocked": would_block,
         "decision": decision,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
     }
 
     return result

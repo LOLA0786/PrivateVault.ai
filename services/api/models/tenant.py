@@ -1,3 +1,4 @@
+from datetime import timezone
 from typing import Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
@@ -18,4 +19,4 @@ class TenantResponse(BaseModel):
     tenant_id: str
     name: str
     metadata: Optional[dict] = None
-    created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())

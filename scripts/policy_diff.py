@@ -26,7 +26,7 @@ def diff_policies(old_name: str, new_name: str):
     diff = DeepDiff(old_policy, new_policy, ignore_order=True)
 
     return {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
         "old_policy": old_name,
         "new_policy": new_name,
         "diff": diff.to_dict(),

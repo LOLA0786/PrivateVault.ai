@@ -1,3 +1,4 @@
+from datetime import timezone
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from datetime import datetime
@@ -41,7 +42,7 @@ def chat_respond(payload: ChatRequest, request: Request):
 
     normalized = normalize(payload.message or "")
     policy = load_policy(tenant_id)
-    decision = evaluate_policy(normalized, policy)
+    decision = evaluate_policy(normalized["text"], policy)
 
     if decision["decision"] == "BLOCK":
         return {
@@ -50,7 +51,7 @@ def chat_respond(payload: ChatRequest, request: Request):
                 f"📜 Policy: {decision['policy_id']}\n"
                 "🧠 Reason: Policy enforcement\n"
                 "🔐 Evidence Hash: 0xabc123\n"
-                f"⏱ Timestamp: {datetime.utcnow().isoformat()}Z"
+                f"⏱ Timestamp: {datetime.now(timezone.utc).isoformat()}Z"
             )
         }
 
@@ -89,7 +90,7 @@ async def cometchat_webhook(request: Request):
 
     normalized = normalize(text)
     policy = load_policy(tenant_id)
-    decision = evaluate_policy(normalized, policy)
+    decision = evaluate_policy(normalized["text"], policy)
 
     if decision["decision"] == "BLOCK":
         return {
