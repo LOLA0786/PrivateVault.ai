@@ -1,10 +1,11 @@
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-*.egg-info/
-dump.rdb
-privatevault-key.pem
-test_reports/
+*.log
+*.zip
 *.bak
+*.svg
+*.dot
+*.pkl
+*.pth
+node_modules/
 .env

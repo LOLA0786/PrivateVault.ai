@@ -19,7 +19,7 @@ for _ in range(60):
             "local": "healthy"
         }
     }
- provider = random.choice(providers) 
+    provider = random.choice(providers) 
     plan = router.select_path(state)
     outcome = simulate_execution(plan["provider"])
     reward = compute_reward(outcome)
