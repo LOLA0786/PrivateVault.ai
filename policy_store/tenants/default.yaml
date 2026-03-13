@@ -1,0 +1,12 @@
+mode: strict
+version: 1.0.0
+
+rules:
+  - id: block_bad_words
+    action: BLOCK
+    severity: HIGH
+    match:
+      keywords:
+        - hack
+        - exploit
+        - breach

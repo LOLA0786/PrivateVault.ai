@@ -1,0 +1,35 @@
+fastapi
+uvicorn[standard]
+
+hvac
+PyJWT
+structlog
+
+prometheus-client
+requests
+pydantic
+python-multipart
+cryptography
+bcrypt
+python-dotenv
+aiofiles
+python-json-logger
+temporalio
+
+# Testing
+pytest
+pytest-cov
+pytest-html
+pytest-asyncio
+anyio
+
+# Demo test deps
+pytest
+pytest-cov
+pytest-html
+httpx
+asyncpg
+pytest-asyncio
+pynacl
+deepdiff
+psutil

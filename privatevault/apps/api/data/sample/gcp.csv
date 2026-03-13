@@ -1,0 +1,5 @@
+date,service,usage_type,resource_id,cost
+2025-10-01,Compute Engine,Compute,gce-01,25.0
+2025-10-01,Cloud Storage,Storage,,5.1
+2025-10-02,BigQuery,Analytics,bq,18.4
+2025-10-02,Compute Engine,Compute,gce-01,24.2

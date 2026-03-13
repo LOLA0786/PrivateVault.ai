@@ -1,0 +1,8 @@
+pytest
+pytest-asyncio
+pytest-timeout
+pytest-cov
+anyio
+psutil
+pynacl
+deepdiff

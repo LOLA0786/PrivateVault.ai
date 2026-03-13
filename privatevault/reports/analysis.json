@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-11-11T09:41:23.274227",
+  "health_score": 88.5,
+  "overall_severity": "critical",
+  "statistics": {
+    "total_files": 1,
+    "total_lines": 17,
+    "issues_by_severity": {
+      "critical": 1,
+      "high": 0,
+      "medium": 0,
+      "low": 2
+    },
+    "issues_by_category": {
+      "Documentation": 1,
+      "Security": 1,
+      "Legacy Code": 1
+    }
+  },
+  "total_issues": 3,
+  "issues": [
+    {
+      "category": "Security",
+      "severity": "critical",
+      "description": "Hard-coded password",
+      "file": "src/example.py",
+      "line": 6,
+      "auto_fixable": true
+    },
+    {
+      "category": "Documentation",
+      "severity": "low",
+      "description": "TODO/FIXME found",
+      "file": "src/example.py",
+      "line": 4,
+      "auto_fixable": true
+    },
+    {
+      "category": "Legacy Code",
+      "severity": "low",
+      "description": "Use strict equality (===)",
+      "file": "src/example.py",
+      "line": 15,
+      "auto_fixable": true
+    }
+  ]
+}

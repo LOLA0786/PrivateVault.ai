@@ -1,0 +1,7 @@
+date,service,usage_type,resource_id,cost
+2025-10-01,Amazon EC2,Compute,i-123,42.5
+2025-10-01,Amazon S3,Storage,,7.9
+2025-10-01,EC2 - Other,Data Transfer,,3.1
+2025-10-02,Amazon RDS,Database,db-9ab,12.2
+2025-10-02,Amazon EC2,Compute,i-123,40.1
+2025-10-02,Amazon S3,Storage,,8.0

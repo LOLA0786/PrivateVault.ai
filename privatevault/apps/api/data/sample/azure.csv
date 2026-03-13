@@ -1,0 +1,5 @@
+date,service,usage_type,resource_id,cost
+2025-10-01,Virtual Machines,Compute,vm-001,31.8
+2025-10-01,Blob Storage,Storage,,6.2
+2025-10-02,Azure SQL Database,Database,sql-02,19.5
+2025-10-02,Virtual Machines,Compute,vm-001,29.1

@@ -1,0 +1,23 @@
+{
+  "name": "cloudshift",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r dev",
+    "dev:api": "pnpm --filter @cloudshift/api dev",
+    "dev:web": "pnpm --filter @cloudshift/web dev",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9"
+  }
+}

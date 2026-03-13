@@ -1,0 +1,10 @@
+actions:
+  - id: cosmos-to-supabase
+    title: "Migrate Azure CosmosDB → Supabase Postgres"
+    steps:
+      - run: "export PGPASSWORD=$SRC && pg_dump -Fc -h cosmos.host -U cosmos > dump.dump"
+        note: "Export source"
+      - run: "pg_restore -h supabase.host -U postgres -d postgres dump.dump"
+        note: "Restore into Supabase"
+      - run: "verify && cutover && decommission"
+        note: "Switch traffic and decommission"

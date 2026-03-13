@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CloudShift Dashboard</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body { font-family: ui-sans-serif, system-ui; margin: 0; background: #0b1220; color: #d7e3ff; }
+      header { background: linear-gradient(90deg,#0e1a33,#0b1220); padding: 16px 24px; border-bottom: 1px solid #1e2b4d;}
+      .brand { font-weight: 800; letter-spacing: .5px; color: #7fb3ff; }
+      .wrap { padding: 24px; max-width: 1100px; margin: 0 auto; }
+      .card { background: #0f1830; border: 1px solid #223059; border-radius: 16px; padding: 16px 20px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      select, button { background:#122046; color:#cfe2ff; border:1px solid #2a3d73; border-radius:10px; padding:8px 12px; }
+      .pill { padding: 4px 10px; border-radius: 999px; background:#162753; border:1px solid #2a3d73; }
+      .green { color:#9dffb0 }
+      table { width:100%; border-collapse: collapse; }
+      th, td { text-align:left; padding:8px; border-bottom:1px solid #223059; }
+    </style>
+  </head>
+  <body>
+    <header><div class="wrap"><span class="brand">CloudShift</span> • FinOps Autopilot</div></header>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "@cloudshift/api",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@cloudshift/core": "workspace:*",
+    "@fastify/cors": "^8.5.0",
+    "@fastify/formbody": "7",
+    "@fastify/static": "6",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.29.1",
+    "razorpay": "^2.9.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.3"
+  }
+}
