@@ -1,0 +1,43 @@
+{"timestamp": 1774012061.8898444, "action": "get weather data", "severity": "MEDIUM", "flags": [], "decision": "QUARANTINE"}
+{"timestamp": 1774012061.89006, "action": "transfer money to account", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012061.890249, "action": "delete database", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012061.8903878, "action": "scrape website data", "severity": "MEDIUM", "flags": [{"type": "suspicious", "severity": "MEDIUM"}], "decision": "QUARANTINE"}
+{"timestamp": 1774012061.8904905, "action": "normal user query", "severity": "MEDIUM", "flags": [], "decision": "QUARANTINE"}
+{"timestamp": 1774012231.9583316, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774012231.9587433, "action": "transfer money to account", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012231.9589272, "action": "delete database", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012231.959098, "action": "scrape website data", "severity": "MEDIUM", "flags": [{"type": "suspicious", "severity": "MEDIUM"}], "decision": "QUARANTINE"}
+{"timestamp": 1774012231.9592762, "action": "normal user query", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774012303.327471, "action": "fetch user profile", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774012303.328033, "action": "transfer money to external account", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012303.328272, "action": "delete production database", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012560.9685936, "action": "{'action': 'get weather data'}", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774012560.969263, "action": "{'action': 'transfer money to vendor'}", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012560.9695187, "action": "{'action': 'delete user table'}", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012628.1333277, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774012628.1349664, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012628.1352046, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012744.256678, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774012744.258076, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012744.2583463, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012899.369095, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774012899.3708403, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012899.3710856, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012960.7275693, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774012960.728919, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774012960.7292333, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013231.2413428, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774013231.2425785, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013231.2428384, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013276.7387311, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774013276.740026, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013276.7402933, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013496.8343956, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774013496.835932, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013496.8362045, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013591.5495532, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774013591.550757, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013591.5509686, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013717.8324642, "action": "get weather data", "severity": "LOW", "flags": [], "decision": "ALLOW"}
+{"timestamp": 1774013717.834226, "action": "transfer money to vendor", "severity": "HIGH", "flags": [{"type": "financial", "severity": "HIGH"}], "decision": "BLOCK"}
+{"timestamp": 1774013717.8344655, "action": "delete user table", "severity": "HIGH", "flags": [{"type": "destructive", "severity": "HIGH"}], "decision": "BLOCK"}

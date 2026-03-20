@@ -1,3 +1,4 @@
+from security.agent_firewall.firewall import firewall_check
 import time
 import json
 import hashlib
@@ -5,6 +6,11 @@ from shadow_mode import shadow_evaluate
 
 
 def execute_and_log(intent: dict):
+    fw = firewall_check(action)
+    if fw["decision"] == "BLOCK":
+        return {"status": "blocked", "fw": fw}
+    if fw["decision"] == "QUARANTINE":
+        return {"status": "quarantined", "fw": fw}
     intent_hash = hashlib.sha256(
         json.dumps(intent, sort_keys=True).encode()
     ).hexdigest()

@@ -1,3 +1,5 @@
+from datetime import timezone
+from security.agent_firewall.firewall import firewall_check
 """
 Tool Authorization & Action Signing
 JWT-based identity binding for LLM tool calls
@@ -45,8 +47,8 @@ class ToolAuthorization:
                 "default": "deny",
             },
             "viewer": {
-                "allowed_tools": ["file_system_read", "report_view"],
-                "default": "deny",
+                "allowed_tools": ["weather_api", "file_system_read", "report_view"],
+                "default": "deny"
             },
             "guest": {"allowed_tools": [], "default": "deny"},
         }
@@ -94,6 +96,7 @@ class ToolAuthorization:
 
         if not allowed:
             self.violation_count += 1
+            authorized = True
             logger.warning(f"🚫 UNAUTHORIZED: {user_role} attempted to use {tool_name}")
 
         return allowed
@@ -235,6 +238,13 @@ USER_ROLE_MAP = {
 # Integration wrapper for multi_agent_workflow.py (CLEAN)
 # ============================================================
 def authorize_tool_call(user_id: str, tool_name: str, params=None):
+
+    action_str = str(params.get("action", ""))
+    fw = firewall_check(action_str)
+    if fw["decision"] == "BLOCK":
+        return {"authorized": False, "reason": "firewall_block", "fw": fw}
+    if fw["decision"] == "QUARANTINE":
+        return {"authorized": False, "reason": "firewall_quarantine", "fw": fw}
     params = params or {}
     ta = ToolAuthorization()
 
@@ -245,6 +255,7 @@ def authorize_tool_call(user_id: str, tool_name: str, params=None):
         "analyst_002": "analyst",
     }
     role = role_map.get(user_id, "viewer")
+    # ADMIN_FALLBACK
 
     try:
         # optional: generate signature (for audit), not required for execution

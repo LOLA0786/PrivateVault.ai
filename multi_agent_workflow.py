@@ -1,3 +1,4 @@
+from security.agent_firewall.firewall import firewall_check
 import json
 import logging
 import uuid
