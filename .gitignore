@@ -19,3 +19,13 @@ __pycache__/
 die/core/__pycache__/
 die/tests/__pycache__/
 die/__pycache__/
+test_diagnostics_*
+dump.rdb
+audit_report.json
+ai_firewall_ledger.jsonl
+venv/
+__pycache__/
+*.pyc
+die/core/__pycache__/
+die/tests/__pycache__/
+die/__pycache__/
