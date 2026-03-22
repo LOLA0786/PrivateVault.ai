@@ -11,7 +11,7 @@ Key properties:
 import json
 import hashlib
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 from compliance_mapper import map_event_to_controls
 import logging

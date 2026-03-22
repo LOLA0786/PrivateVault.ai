@@ -7,7 +7,7 @@ import re
 import json
 import hashlib
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Tuple
 import logging
 
@@ -227,7 +227,7 @@ if __name__ == "__main__":
     print(json.dumps(firewall.get_stats(), indent=2))
 
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timezone
 
 
 def filter_input(prompt):

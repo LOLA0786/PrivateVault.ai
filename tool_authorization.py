@@ -9,7 +9,7 @@ import jwt
 import json
 import hashlib
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Any
 import logging
 
@@ -239,7 +239,7 @@ USER_ROLE_MAP = {
 # ============================================================
 def authorize_tool_call(user_id: str, tool_name: str, params=None):
 
-    action_str = str(params.get("action", ""))
+    action_str = str(params.get("action", "") if params else "")
     fw = firewall_check(action_str)
     if fw["decision"] == "BLOCK":
         return {"authorized": False, "reason": "firewall_block", "fw": fw}
