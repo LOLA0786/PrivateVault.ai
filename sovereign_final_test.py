@@ -4,7 +4,7 @@ import requests
 def run_test(name, mode, gradient, is_encrypted=False):
     status = "🔒" if is_encrypted else "🔓"
     print(f"\n📡 [TEST: {name}] | Mode: {mode} | Gradient: {gradient} | {status}")
-    url = "http://127.0.0.1:8001/secure_optimize"
+    url = "http://127.0.0.1:8001/shadow_verify"
     payload = {
         "current_val": 100.0,
         "raw_gradient": gradient,
