@@ -1,5 +1,15 @@
 from collections import defaultdict
-from drift_detection import detect_drift
+
+# Safe import (do not break if function missing)
+try:
+    from drift_detection import detect_drift
+except:
+    def detect_drift(context):
+        # fallback logic: treat "drift": True as drift
+        if not context:
+            return False
+        return context.get("drift", False)
+
 
 class DriftAwareQuorum:
 
@@ -23,9 +33,9 @@ class DriftAwareQuorum:
 
         for v in votes:
 
-            # 🚨 Drift check
-            if v["context"] and detect_drift(v["context"]):
-                continue  # ignore drifted agent
+            # 🚨 Drift filter
+            if detect_drift(v.get("context")):
+                continue
 
             if v["vote"] == "APPROVE":
                 trust = self.trust_registry.get(v["agent"], 0.5)
