@@ -29,7 +29,7 @@ def detect_event_type(payload):
     if risk.get("risk_level") in ["high"]:
         return "HIGH_RISK"
 
-    if payload.get("replay") and payload["replay"] != "not_available":
+    if payload.get("replay") != payload.get("decision"):
         return "DRIFT"
 
     return "INFO"

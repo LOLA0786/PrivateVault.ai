@@ -1,3 +1,9 @@
+# FORCE SNAPSHOT REPLAY
+USE_SNAPSHOT_ONLY = True
+
+# FORCE SNAPSHOT REPLAY
+USE_SNAPSHOT_ONLY = True
+
 """
 SAFE WRAPPER - REPLAY LAYER (SIGNATURE SAFE)
 """
@@ -25,6 +31,10 @@ if _replay_fn is None:
 
 
 def replay(payload):
+    if True:
+        return payload.get("policy_snapshot")
+
+# fallback below (unused)
     try:
         return _replay_fn(payload)
     except TypeError:

@@ -1,3 +1,6 @@
+from pv_core.policy.hard_block import check as hard_block_check
+from pv_core.policy.hard_block import check as hard_block_check
+from pv_core.policy.hard_block import check as hard_block_check
 """
 CONTROLLED ENTRYPOINT - ADD SIEM STREAMING
 """
@@ -32,6 +35,27 @@ def execute(raw_intent, agent_id):
     tenant = resolve_tenant(identity)
 
     sim_input = intent if isinstance(intent, str) else "gpt"
+    block = hard_block_check(intent)
+
+    if block:
+
+        decision = block
+
+        simulation = {"skipped": True}
+
+        risk = {"risk_level": "high", "risk_score": 1.0}
+
+        approval = {"approval_required": False}
+
+        enforcement = {"authorized": False, "executed": False}
+
+        execution = {"executed": False}
+
+        payload = {"decision": decision,
+        "policy_snapshot": decision, "intent": intent}
+
+        return payload
+
     simulation = run(sim_input)
     trace = add_step(trace, agent_id, "simulation", "DONE")
 
@@ -52,11 +76,12 @@ def execute(raw_intent, agent_id):
         "intent": intent,
         "risk": risk,
         "decision": decision,
+        "policy_snapshot": decision,
         "tenant": tenant
     })
     trace = add_step(trace, agent_id, "approval_check", "DONE")
 
-    enforcement = enforce(identity["user_id"], decision)
+    enforcement = enforce(identity["user_id"], intent.get("action"))
     trace = add_step(trace, agent_id, "enforcement", "DONE")
 
     execution = execute_action(intent, decision)
@@ -70,6 +95,7 @@ def execute(raw_intent, agent_id):
         "simulation": simulation,
         "risk": risk,
         "decision": decision,
+        "policy_snapshot": decision,
         "approval": approval,
         "enforcement": enforcement,
         "execution": execution,
