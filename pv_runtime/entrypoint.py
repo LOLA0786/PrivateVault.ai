@@ -1,10 +1,11 @@
 """
-CONTROLLED ENTRYPOINT - ADD IAM FEDERATION
+CONTROLLED ENTRYPOINT - ADD MULTI-TENANCY
 """
 
 from pv_core.intent.intent_service import normalize
 from pv_core.context.context_service import build_context
 from pv_core.iam.iam_service import resolve_identity
+from pv_core.tenant.tenant_service import resolve_tenant
 from pv_core.simulation.simulator import run
 from pv_core.policy.policy_service import evaluate
 from pv_core.risk.risk_service import score
@@ -26,6 +27,7 @@ def execute(raw_intent, agent_id):
     context = build_context(intent)
 
     identity = resolve_identity(agent_id)
+    tenant = resolve_tenant(identity)
 
     sim_input = intent if isinstance(intent, str) else "gpt"
     simulation = run(sim_input)
@@ -34,7 +36,12 @@ def execute(raw_intent, agent_id):
     risk = score(intent, simulation)
     trace = add_step(trace, agent_id, "risk_scoring", "DONE")
 
-    enriched_context = {**context, **simulation, "risk": risk}
+    enriched_context = {
+        **context,
+        **simulation,
+        "risk": risk,
+        "tenant": tenant
+    }
 
     decision = evaluate(intent, enriched_context)
     trace = add_step(trace, agent_id, "policy_evaluation", "DONE")
@@ -42,7 +49,8 @@ def execute(raw_intent, agent_id):
     approval = approval_process({
         "intent": intent,
         "risk": risk,
-        "decision": decision
+        "decision": decision,
+        "tenant": tenant
     })
     trace = add_step(trace, agent_id, "approval_check", "DONE")
 
@@ -51,6 +59,7 @@ def execute(raw_intent, agent_id):
 
     payload = {
         "identity": identity,
+        "tenant": tenant,
         "intent": intent,
         "context": context,
         "simulation": simulation,
