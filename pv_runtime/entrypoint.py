@@ -1,11 +1,12 @@
 """
-CONTROLLED ENTRYPOINT - ADD RISK LAYER
+CONTROLLED ENTRYPOINT - ADD ENFORCEMENT LAYER
 """
 
 from pv_core.identity.identity_service import resolve
 from pv_core.simulation.simulator import run
 from pv_core.policy.policy_service import evaluate
 from pv_core.risk.risk_service import score
+from pv_core.enforcement.enforcement_service import enforce
 
 
 def execute(intent, agent_id):
@@ -17,11 +18,14 @@ def execute(intent, agent_id):
     risk = score(intent, simulation)
     decision = evaluate(intent, {**simulation, "risk": risk})
 
+    enforcement = enforce(intent, decision)
+
     return {
         "identity": identity,
         "simulation": simulation,
         "risk": risk,
-        "decision": decision
+        "decision": decision,
+        "enforcement": enforcement
     }
 
 
