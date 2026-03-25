@@ -1,5 +1,5 @@
 """
-CONTROLLED ENTRYPOINT - ADD CONTEXT LAYER
+CONTROLLED ENTRYPOINT - ADD REPLAY LAYER
 """
 
 from pv_core.intent.intent_service import normalize
@@ -10,6 +10,7 @@ from pv_core.policy.policy_service import evaluate
 from pv_core.risk.risk_service import score
 from pv_core.enforcement.enforcement_service import enforce
 from pv_core.audit.audit_service import log
+from pv_core.replay.replay_service import replay
 
 
 def execute(raw_intent, agent_id):
@@ -39,6 +40,9 @@ def execute(raw_intent, agent_id):
         "decision": decision,
         "enforcement": enforcement
     }
+
+    replay_result = replay(payload)
+    payload["replay"] = replay_result
 
     log(payload)
 
