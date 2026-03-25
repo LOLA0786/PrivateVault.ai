@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+echo "[STEP 1] Creating base architecture (SAFE - no overwrite)"
+
+mkdir -p pv_core/{intent,policy,risk,simulation,enforcement,identity}
+mkdir -p pv_control_plane
+mkdir -p pv_connectors
+mkdir -p pv_runtime
+mkdir -p pv_observability
+mkdir -p pv_enterprise
+mkdir -p legacy
+mkdir -p scripts/patches
+mkdir -p docs/architecture
+
+echo "[DONE] Step 1 complete"
