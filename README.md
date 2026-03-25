@@ -141,7 +141,110 @@ PrivateVault includes multiple runtime safety mechanisms:
 * policy validation
 
 ---
+   # PrivateVault — AI Decision Control Plane
 
+PrivateVault is a governance layer for multi-agent AI systems that ensures **every decision is controlled, auditable, and policy-compliant before execution**.
+
+Unlike typical agent frameworks that optimize for autonomy, PrivateVault enforces **decision integrity**.
+
+---
+
+## 🔥 What Problem We Solve
+
+AI agents today can:
+- Make high-impact decisions autonomously  
+- Disagree with each other  
+- Bypass business rules  
+- Execute unsafe actions without oversight  
+
+There is **no enforcement layer** between agent reasoning and real-world execution.
+
+---
+
+## ⚡ Our Approach
+
+PrivateVault introduces a **Decision Control Plane**:
+
+
+Agents → Consensus → Policy Enforcement → Final Decision → Cryptographic Audit
+
+
+- Agents propose decisions  
+- Consensus aggregates intent  
+- Policy layer overrides unsafe outcomes  
+- Final action is enforced or blocked  
+- Every step is cryptographically auditable  
+
+---
+
+## 🧠 Adaptive Trust Layer (Human + Learning Hybrid)
+
+PrivateVault includes a **governed trust system** that controls how much influence each agent has.
+
+### 1. Human-Governed Baseline
+- Operators define trust weights  
+- Set min/max bounds  
+- Override any agent at any time  
+
+### 2. Adaptive Calibration (Optional)
+- System adjusts trust based on behavior  
+- Penalizes unsafe or incorrect decisions  
+- Rewards consistent, policy-aligned behavior  
+- Converges to **role-specific trust equilibrium**
+
+### 3. Key Property
+
+> Trust evolves — but always within **controlled, auditable limits**
+
+---
+
+## 🎯 Example Behavior
+
+- Agents approve a risky action → system blocks via policy  
+- Repeated violations → agent trust decreases  
+- Correct behavior → trust gradually recovers  
+- Over time → system **stabilizes agent influence automatically**
+
+---
+
+## 🔐 Core Capabilities
+
+- Decision Firewall (block unsafe actions)  
+- Multi-Agent Quorum Engine  
+- Policy Enforcement Layer  
+- Adaptive Trust System (bounded learning)  
+- Drift Detection & Agent Isolation  
+- Cryptographic Decision Logs (replayable)  
+
+---
+
+## 🧪 Demo
+
+Run:
+
+```bash
+python coordination/mesh/demo_full_pipeline.py
+
+Test trust evolution:
+
+python test_trust_flow.py
+python test_trust_recovery.py
+💡 Key Insight
+
+AI systems don’t fail because they lack intelligence —
+they fail because they lack control.
+
+PrivateVault ensures that no AI decision executes without governance.
+
+🚀 Vision
+
+PrivateVault aims to become the operating system for AI decision governance, enabling safe deployment of autonomous agents in:
+
+Finance
+Enterprise SaaS
+Healthcare
+Autonomous systems
+🤝 Contact
 # Repository Layout
 
 ```
