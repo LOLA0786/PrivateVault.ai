@@ -1,5 +1,5 @@
 """
-CONTROLLED ENTRYPOINT - ADD EXPLAINABILITY
+CONTROLLED ENTRYPOINT - ADD APPROVAL LAYER
 """
 
 from pv_core.intent.intent_service import normalize
@@ -12,6 +12,7 @@ from pv_core.enforcement.enforcement_service import enforce
 from pv_core.audit.audit_service import log
 from pv_core.replay.replay_service import replay
 from pv_core.explainability.receipt_service import generate_receipt
+from pv_core.approval.approval_service import process as approval_process
 
 
 def execute(raw_intent, agent_id):
@@ -30,6 +31,12 @@ def execute(raw_intent, agent_id):
 
     decision = evaluate(intent, enriched_context)
 
+    approval = approval_process({
+        "intent": intent,
+        "risk": risk,
+        "decision": decision
+    })
+
     enforcement = enforce(intent, decision)
 
     payload = {
@@ -39,6 +46,7 @@ def execute(raw_intent, agent_id):
         "simulation": simulation,
         "risk": risk,
         "decision": decision,
+        "approval": approval,
         "enforcement": enforcement
     }
 
@@ -54,7 +62,7 @@ def execute(raw_intent, agent_id):
 
 
 if __name__ == "__main__":
-    test_intent = {"action": "health_check"}
+    test_intent = {"action": "transfer_funds", "amount": 20000}
     test_agent = "agent_1"
 
     result = execute(test_intent, test_agent)
