@@ -1,10 +1,10 @@
 """
-CONTROLLED ENTRYPOINT - ADD MULTI-AGENT COORDINATION
+CONTROLLED ENTRYPOINT - ADD IAM FEDERATION
 """
 
 from pv_core.intent.intent_service import normalize
 from pv_core.context.context_service import build_context
-from pv_core.identity.identity_service import resolve
+from pv_core.iam.iam_service import resolve_identity
 from pv_core.simulation.simulator import run
 from pv_core.policy.policy_service import evaluate
 from pv_core.risk.risk_service import score
@@ -24,7 +24,8 @@ def execute(raw_intent, agent_id):
     trace = start_trace(agent_id, intent)
 
     context = build_context(intent)
-    identity = resolve(agent_id)
+
+    identity = resolve_identity(agent_id)
 
     sim_input = intent if isinstance(intent, str) else "gpt"
     simulation = run(sim_input)
@@ -45,7 +46,7 @@ def execute(raw_intent, agent_id):
     })
     trace = add_step(trace, agent_id, "approval_check", "DONE")
 
-    enforcement = enforce(intent, decision)
+    enforcement = enforce(identity["user_id"], decision)
     trace = add_step(trace, agent_id, "enforcement", "DONE")
 
     payload = {
@@ -60,11 +61,8 @@ def execute(raw_intent, agent_id):
         "trace": trace
     }
 
-    replay_result = replay(payload)
-    payload["replay"] = replay_result
-
-    receipt = generate_receipt(payload)
-    payload["receipt"] = receipt
+    payload["replay"] = replay(payload)
+    payload["receipt"] = generate_receipt(payload)
 
     trace = finalize_trace(trace, decision)
     payload["trace"] = trace
