@@ -1,7 +1,8 @@
 """
-CONTROLLED ENTRYPOINT - ADD AUDIT LAYER
+CONTROLLED ENTRYPOINT - ADD INTENT LAYER
 """
 
+from pv_core.intent.intent_service import normalize
 from pv_core.identity.identity_service import resolve
 from pv_core.simulation.simulator import run
 from pv_core.policy.policy_service import evaluate
@@ -10,7 +11,9 @@ from pv_core.enforcement.enforcement_service import enforce
 from pv_core.audit.audit_service import log
 
 
-def execute(intent, agent_id):
+def execute(raw_intent, agent_id):
+    intent = normalize(raw_intent, agent_id)
+
     identity = resolve(agent_id)
 
     sim_input = intent if isinstance(intent, str) else "gpt"
