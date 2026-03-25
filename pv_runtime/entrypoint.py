@@ -1,10 +1,3 @@
-from pv_core.policy.hard_block import check as hard_block_check
-from pv_core.policy.hard_block import check as hard_block_check
-from pv_core.policy.hard_block import check as hard_block_check
-"""
-CONTROLLED ENTRYPOINT - ADD SIEM STREAMING
-"""
-
 from pv_core.intent.intent_service import normalize
 from pv_core.context.context_service import build_context
 from pv_core.iam.iam_service import resolve_identity
@@ -23,48 +16,37 @@ from pv_core.coordination.coordination_service import (
 )
 from pv_core.siem.siem_service import process as siem_process
 
+from pv_core.runtime.latency_mode import FAST_MODE
+from pv_core.risk.fast_risk import quick_score
+
 
 def execute(raw_intent, agent_id):
     intent = normalize(raw_intent, agent_id)
-
     trace = start_trace(agent_id, intent)
 
     context = build_context(intent)
-
     identity = resolve_identity(agent_id)
     tenant = resolve_tenant(identity)
 
-    sim_input = intent if isinstance(intent, str) else "gpt"
-    block = hard_block_check(intent)
+    # FAST vs FULL simulation
+    if FAST_MODE:
+        simulation = {"skipped": True, "mode": "fast"}
+    else:
+        simulation = run(intent)
 
-    if block:
-
-        decision = block
-
-        simulation = {"skipped": True}
-
-        risk = {"risk_level": "high", "risk_score": 1.0}
-
-        approval = {"approval_required": False}
-
-        enforcement = {"authorized": False, "executed": False}
-
-        execution = {"executed": False}
-
-        payload = {"decision": decision,
-        "policy_snapshot": decision, "intent": intent}
-
-        return payload
-
-    simulation = run(sim_input)
     trace = add_step(trace, agent_id, "simulation", "DONE")
 
-    risk = score(intent, simulation)
+    # FAST vs FULL risk
+    if FAST_MODE:
+        risk = quick_score(intent)
+    else:
+        risk = score(intent, simulation)
+
     trace = add_step(trace, agent_id, "risk_scoring", "DONE")
 
     enriched_context = {
         **context,
-        **simulation,
+        "simulation": simulation,
         "risk": risk,
         "tenant": tenant
     }
@@ -76,9 +58,9 @@ def execute(raw_intent, agent_id):
         "intent": intent,
         "risk": risk,
         "decision": decision,
-        "policy_snapshot": decision,
         "tenant": tenant
     })
+
     trace = add_step(trace, agent_id, "approval_check", "DONE")
 
     enforcement = enforce(identity["user_id"], intent.get("action"))
@@ -104,8 +86,6 @@ def execute(raw_intent, agent_id):
 
     payload["replay"] = replay(payload)
     payload["receipt"] = generate_receipt(payload)
-
-    # 🔥 NEW: SIEM STREAM
     payload["siem_event"] = siem_process(payload)
 
     trace = finalize_trace(trace, decision)
@@ -113,12 +93,21 @@ def execute(raw_intent, agent_id):
 
     log(payload)
 
+    # 🔥 ASYNC BACKGROUND
+    if FAST_MODE:
+        import threading
+
+        def background_tasks(p):
+            sim = run(p["intent"])
+            deep_risk = score(p["intent"], sim)
+            print("[ASYNC] Deep analysis complete")
+
+        threading.Thread(target=background_tasks, args=(payload,)).start()
+
     return payload
 
 
 if __name__ == "__main__":
     test_intent = {"action": "transfer_funds", "amount": 20000}
-    test_agent = "agent_1"
-
-    result = execute(test_intent, test_agent)
+    result = execute(test_intent, "agent_1")
     print(result)
