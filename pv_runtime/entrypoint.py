@@ -1,5 +1,5 @@
 """
-CONTROLLED ENTRYPOINT - ADD REPLAY LAYER
+CONTROLLED ENTRYPOINT - ADD EXPLAINABILITY
 """
 
 from pv_core.intent.intent_service import normalize
@@ -11,6 +11,7 @@ from pv_core.risk.risk_service import score
 from pv_core.enforcement.enforcement_service import enforce
 from pv_core.audit.audit_service import log
 from pv_core.replay.replay_service import replay
+from pv_core.explainability.receipt_service import generate_receipt
 
 
 def execute(raw_intent, agent_id):
@@ -44,14 +45,15 @@ def execute(raw_intent, agent_id):
     replay_result = replay(payload)
     payload["replay"] = replay_result
 
+    receipt = generate_receipt(payload)
+    payload["receipt"] = receipt
+
     log(payload)
 
     return payload
 
 
 if __name__ == "__main__":
-    print("[CHECK] entrypoint loaded")
-
     test_intent = {"action": "health_check"}
     test_agent = "agent_1"
 
