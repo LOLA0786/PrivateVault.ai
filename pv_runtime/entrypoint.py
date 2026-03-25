@@ -1,5 +1,5 @@
 """
-CONTROLLED ENTRYPOINT - ADD CONNECTORS (REAL EXECUTION)
+CONTROLLED ENTRYPOINT - ADD SIEM STREAMING
 """
 
 from pv_core.intent.intent_service import normalize
@@ -18,6 +18,7 @@ from pv_core.approval.approval_service import process as approval_process
 from pv_core.coordination.coordination_service import (
     start_trace, add_step, finalize_trace
 )
+from pv_core.siem.siem_service import process as siem_process
 
 
 def execute(raw_intent, agent_id):
@@ -77,6 +78,9 @@ def execute(raw_intent, agent_id):
 
     payload["replay"] = replay(payload)
     payload["receipt"] = generate_receipt(payload)
+
+    # 🔥 NEW: SIEM STREAM
+    payload["siem_event"] = siem_process(payload)
 
     trace = finalize_trace(trace, decision)
     payload["trace"] = trace
