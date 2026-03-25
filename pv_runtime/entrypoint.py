@@ -1,5 +1,5 @@
 """
-CONTROLLED ENTRYPOINT - ADD MULTI-TENANCY
+CONTROLLED ENTRYPOINT - ADD CONNECTORS (REAL EXECUTION)
 """
 
 from pv_core.intent.intent_service import normalize
@@ -10,6 +10,7 @@ from pv_core.simulation.simulator import run
 from pv_core.policy.policy_service import evaluate
 from pv_core.risk.risk_service import score
 from pv_core.enforcement.enforcement_service import enforce
+from pv_core.connectors.connector_service import execute_action
 from pv_core.audit.audit_service import log
 from pv_core.replay.replay_service import replay
 from pv_core.explainability.receipt_service import generate_receipt
@@ -57,6 +58,9 @@ def execute(raw_intent, agent_id):
     enforcement = enforce(identity["user_id"], decision)
     trace = add_step(trace, agent_id, "enforcement", "DONE")
 
+    execution = execute_action(intent, decision)
+    trace = add_step(trace, agent_id, "execution", "DONE")
+
     payload = {
         "identity": identity,
         "tenant": tenant,
@@ -67,6 +71,7 @@ def execute(raw_intent, agent_id):
         "decision": decision,
         "approval": approval,
         "enforcement": enforcement,
+        "execution": execution,
         "trace": trace
     }
 
