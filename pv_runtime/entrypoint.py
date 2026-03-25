@@ -1,24 +1,26 @@
 """
-CONTROLLED ENTRYPOINT - SAFE INPUT ADAPTATION
+CONTROLLED ENTRYPOINT - ADD RISK LAYER
 """
 
 from pv_core.identity.identity_service import resolve
 from pv_core.simulation.simulator import run
 from pv_core.policy.policy_service import evaluate
+from pv_core.risk.risk_service import score
 
 
 def execute(intent, agent_id):
     identity = resolve(agent_id)
 
-    # SAFE TEST INPUT for simulation (avoid invalid provider keys)
-    sim_input = "default" if isinstance(intent, dict) else intent
-
+    sim_input = intent if isinstance(intent, str) else "gpt"
     simulation = run(sim_input)
-    decision = evaluate(intent, simulation)
+
+    risk = score(intent, simulation)
+    decision = evaluate(intent, {**simulation, "risk": risk})
 
     return {
         "identity": identity,
         "simulation": simulation,
+        "risk": risk,
         "decision": decision
     }
 
