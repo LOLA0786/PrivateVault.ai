@@ -1,4 +1,3 @@
-from main import TransactionRequest, VerificationResponse
 import uuid
 from datetime import datetime
 
@@ -63,3 +62,14 @@ class MeshControlAdapter:
                 "status": "BLOCK",
                 "reason": str(e)
             }
+
+class TransactionRequest:
+    def __init__(self, amount, user_id, risk_score):
+        self.amount = amount
+        self.user_id = user_id
+        self.risk_score = risk_score
+
+class VerificationResponse:
+    def __init__(self, approved, reason):
+        self.approved = approved
+        self.reason = reason

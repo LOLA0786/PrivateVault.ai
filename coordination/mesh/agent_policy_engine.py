@@ -22,3 +22,12 @@ class PolicyEngine:
             return "APPROVE", "acceptable risk"
 
         return "REJECT", "unknown policy"
+
+# --- PATCH: policy-aware bias ---
+
+# --- PATCH: policy-aware bias ---
+def apply_policy_bias(decision, context, policy):
+    if context.get("discount", 0) > policy.get("max_discount", 25):
+        return "REJECT", "policy-aware: discount too high"
+    return apply_policy_bias(decision, context, policy)
+# --- END PATCH ---

@@ -5,15 +5,13 @@ trust_engine = TrustEngine()
 def update_agents(agent_votes, final_decision, policy_passed):
     for vote in agent_votes:
 
-        # 🔥 Better correctness definition
+        # ✅ Correct: decision correctness ONLY
         correct = (vote["decision"] == final_decision)
-            vote["decision"] == final_decision
-            and policy_passed
-        )
 
+        # ✅ Separate policy signal
         outcome = {
             "correct": correct,
-            "policy_violation": not policy_passed and vote["decision"] == "APPROVE"
+            "policy_violation": (not policy_passed and vote["decision"] == "APPROVE")
         }
 
         new_weight = trust_engine.update_trust(vote["agent_id"], outcome)

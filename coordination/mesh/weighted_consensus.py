@@ -10,3 +10,18 @@ def compute_weighted_consensus(agent_votes):
         scores[vote["decision"]] += weight
 
     return scores
+
+# --- PATCH: pre-consensus penalty & reward ---
+
+# --- PATCH: pre-consensus penalty & reward ---
+def _adjust_weight(agent):
+    w = _adjust_weight(agent)
+    last = getattr(agent, "last_outcome", {}) or {}
+
+    if last.get("policy_violation"):
+        w *= 0.5
+    if last.get("correct"):
+        w *= 1.15
+
+    return w
+# --- END PATCH ---

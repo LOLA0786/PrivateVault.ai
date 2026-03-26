@@ -1,13 +1,13 @@
-from drift_aware_quorum import DriftAwareQuorum
+from coordination.mesh.drift_aware_quorum import DriftAwareQuorum
 from coordination.trust.trust_engine import TrustEngine
 
 te = TrustEngine()
 from coordination.trust.trust_engine import TrustEngine
 
 te = TrustEngine()
-from trust_registry import TrustRegistry
-from decision_engine import MeshDecisionEngine
-from agent_policy_engine import PolicyEngine
+from coordination.mesh.trust_registry import TrustRegistry
+from coordination.mesh.decision_engine import MeshDecisionEngine
+from coordination.mesh.agent_policy_engine import PolicyEngine
 import hashlib
 import json
 from datetime import datetime, timezone
@@ -97,6 +97,7 @@ else:
 
 print("\n=== FINAL DECISION ===")
 
+
 # === TRUST UPDATE ===
 from coordination.trust.update_after_decision import update_agents
 
@@ -136,3 +137,6 @@ print("\nDecision Path:")
 print("Agent Policies → Consensus → Policy → Final Outcome")
 
 print("\n========================\n")
+
+# --- PATCH: alignment metric ---
+# --- END PATCH ---
