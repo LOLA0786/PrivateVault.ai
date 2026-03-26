@@ -1,4 +1,10 @@
 from drift_aware_quorum import DriftAwareQuorum
+from coordination.trust.trust_engine import TrustEngine
+
+te = TrustEngine()
+from coordination.trust.trust_engine import TrustEngine
+
+te = TrustEngine()
 from trust_registry import TrustRegistry
 from decision_engine import MeshDecisionEngine
 from agent_policy_engine import PolicyEngine
@@ -46,7 +52,10 @@ for agent in agents:
         context={"stable": True}
     )
 
-    print(f"{agent} ({trust.get(agent):.1f}) → {decision}")
+    
+
+
+    print(f"{agent} (static:{trust.get(agent):.1f} | dynamic:{te.get_weight(agent):.2f}) → {decision}")
     print(f"   ↳ reason: {reason}")
 
 # CONSENSUS
@@ -87,6 +96,20 @@ else:
     final_status = "BLOCK"
 
 print("\n=== FINAL DECISION ===")
+
+# === TRUST UPDATE ===
+from coordination.trust.update_after_decision import update_agents
+
+agent_votes = [
+    {"agent_id": "pricing_agent", "decision": "APPROVE"},
+    {"agent_id": "risk_agent", "decision": "REJECT"},
+    {"agent_id": "revenue_agent", "decision": "APPROVE"}
+]
+
+
+final_decision = "APPROVE" if final_status == "ALLOW" else "REJECT"
+
+update_agents(agent_votes, final_decision, policy_pass)
 print(final_status)
 
 # CRYPTO PROOF

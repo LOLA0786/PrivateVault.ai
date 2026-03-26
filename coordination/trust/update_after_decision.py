@@ -6,7 +6,7 @@ def update_agents(agent_votes, final_decision, policy_passed):
     for vote in agent_votes:
 
         # 🔥 Better correctness definition
-        correct = (
+        correct = (vote["decision"] == final_decision)
             vote["decision"] == final_decision
             and policy_passed
         )
