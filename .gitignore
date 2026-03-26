@@ -30,3 +30,17 @@ die/core/__pycache__/
 die/tests/__pycache__/
 die/__pycache__/
 evidence.jsonl
+
+# PrivateVault demo artifacts
+__pycache__/
+*.pyc
+/tmp/
+pv_home/
+
+# Attack simulations
+fake_litellm_install.py
+malicious_package_sim.py
+
+# Local runtime artifacts
+evidence.jsonl
+
