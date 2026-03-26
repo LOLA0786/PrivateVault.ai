@@ -433,3 +433,42 @@ See `LICENSE` for licensing information.
 PrivateVault is under active development.
 
 The platform is evolving toward a full **AI governance control plane and runtime enforcement system** designed for enterprise AI deployments.
+
+---
+
+# 🛡️ Dependency Runtime Firewall (New)
+
+Modern AI systems depend on hundreds of external packages.  
+A single compromised dependency can exfiltrate:
+
+- API keys
+- cloud credentials (AWS/GCP/Azure)
+- SSH keys
+- CI/CD secrets
+
+PrivateVault extends governance beyond agent decisions into **runtime execution itself**.
+
+## What It Enforces
+
+Even if malicious code executes:
+
+- ❌ Cannot read sensitive files (`~/.aws`, `.ssh`, `.env`)
+- ❌ Cannot access environment secrets
+- ❌ Cannot perform HTTP exfiltration
+- ❌ Cannot spawn subprocesses (`curl`, `wget`)
+- ❌ Cannot open raw socket connections
+
+## Secure Dependency Installation
+
+PrivateVault also isolates package installation:
+
+```bash
+./pv_secure_pip.sh <package>
+sandboxed HOME
+no credential access
+controlled environment
+Key Principle
+
+Assume dependencies are compromised.
+Enforce zero-trust execution at runtime and install-time.
+
