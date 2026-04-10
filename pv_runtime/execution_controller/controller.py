@@ -1,3 +1,5 @@
+from pv_runtime.retry.retry_engine import RetryEngine
+retry_engine = RetryEngine()
 
 from typing import Dict, Any
 
@@ -23,39 +25,36 @@ class ExecutionController:
 
     def execute(self, agent_id: str, action: Dict[str, Any]) -> Dict[str, Any]:
 
-        id_check = self.idempotency.check_or_store(agent_id, action)
-        if id_check.get("duplicate"):
-            return {
-                "status": "DUPLICATE",
-                "cached_result": id_check["result"]
-            }
-
         self.event_store.append_event(
             "ACTION_REQUESTED",
             {"agent": agent_id, "action": action}
         )
 
-        lock_key = f"{agent_id}:{action.get('action')}"
+        lock_key = f"{action.get('action')}:{action.get('recipient')}"
 
         def _execute():
             try:
+                # ✅ IDEMPOTENCY INSIDE LOCK
+                id_check = self.idempotency.check_or_store(agent_id, action)
+                if id_check.get("duplicate"):
+                    return {
+                        "status": "DUPLICATE",
+                        "cached_result": id_check["result"]
+                    }
+
+                # CONTEXT GRAPH
                 self.graph.record_intent(agent_id, action)
 
+                # WALLET CHECK
                 if not self.wallet.is_within_budget(agent_id, action):
-                    self.event_store.append_event(
-                        "ACTION_BLOCKED",
-                        {"agent": agent_id, "action": action, "reason": "budget"}
-                    )
                     return {"status": "BLOCK", "reason": "Budget exceeded"}
 
+                # TOOL VALIDATION
                 validation = self.tool_validator.validate(action)
                 if not validation["valid"]:
-                    self.event_store.append_event(
-                        "ACTION_BLOCKED",
-                        {"agent": agent_id, "action": action, "reason": validation["reason"]}
-                    )
                     return {"status": "BLOCK", "reason": validation["reason"]}
 
+                # EXECUTION
                 result = self._execute_action(action)
 
                 self.graph.record_outcome(agent_id, action, result)
@@ -65,6 +64,7 @@ class ExecutionController:
                     {"agent": agent_id, "action": action, "result": result}
                 )
 
+                # STORE IDEMPOTENCY RESULT
                 self.idempotency.check_or_store(agent_id, action, result)
 
                 return {"status": "SUCCESS", "result": result}
@@ -88,10 +88,11 @@ class ExecutionController:
                     "rollback": rollback_result
                 }
 
-        return self.lock_manager.execute_with_lock(lock_key, _execute)
+        return retry_engine.execute_with_retry(lambda: self.lock_manager.execute_with_lock(lock_key, _execute))
 
     def _execute_action(self, action: Dict[str, Any]):
-        # 🔥 Proper failure injection
+        import time; time.sleep(0.05)
+
         if action.get("fail"):
             raise Exception("Simulated failure")
 
@@ -99,4 +100,3 @@ class ExecutionController:
             "executed": True,
             "action": action
         }
-

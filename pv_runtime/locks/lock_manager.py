@@ -20,6 +20,7 @@ class LockManager:
             del self.memory_locks[key]
 
     def execute_with_lock(self, key, func):
+        # 🚨 NON-BLOCKING LOCK
         if not self.acquire_lock(key):
             return {"status": "LOCKED"}
 
