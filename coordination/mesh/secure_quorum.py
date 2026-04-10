@@ -1,5 +1,5 @@
 from collections import defaultdict
-from signing import verify_signature
+from coordination.mesh.signing import verify_signature
 
 class SecureQuorum:
 

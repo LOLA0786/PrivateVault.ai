@@ -1,7 +1,7 @@
-from decision_engine import MeshDecisionEngine
-from weighted_quorum import WeightedQuorum
-from trust_registry import TrustRegistry
-from mesh_control_adapter import MeshControlAdapter
+from coordination.mesh.decision_engine import MeshDecisionEngine
+from coordination.mesh.weighted_quorum import WeightedQuorum
+from coordination.mesh.trust_registry import TrustRegistry
+from coordination.mesh.mesh_control_adapter import MeshControlAdapter
 
 # setup trust
 trust = TrustRegistry()

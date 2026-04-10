@@ -1,3 +1,6 @@
+from pv_runtime.tool_firewall.tool_validator import ToolValidator
+validator = ToolValidator()
+
 """
 SIMPLIFIED AUTHORIZATION (DEMO SAFE)
 """

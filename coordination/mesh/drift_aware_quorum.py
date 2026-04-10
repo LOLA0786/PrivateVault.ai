@@ -2,7 +2,7 @@ from collections import defaultdict
 
 # Safe import (do not break if function missing)
 try:
-    from drift_detection import detect_drift
+    from coordination.mesh.drift_detection import detect_drift
 except:
     def detect_drift(context):
         # fallback logic: treat "drift": True as drift

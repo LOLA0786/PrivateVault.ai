@@ -1,27 +1,41 @@
-from coordination.trust.trust_engine import TrustEngine
-
-trust_engine = TrustEngine()
-
 def compute_weighted_consensus(agent_votes):
-    scores = {"APPROVE": 0.0, "REJECT": 0.0}
+    total_weight = 0
+    positive_weight = 0
 
-    for vote in agent_votes:
-        weight = trust_engine.get_weight(vote["agent_id"])
-        scores[vote["decision"]] += weight
+    for agent in agent_votes:
+        weight = agent.get("weight", 0)
+        vote = agent.get("vote", False)
 
-    return scores
+        total_weight += weight
+        if vote:
+            positive_weight += weight
 
-# --- PATCH: pre-consensus penalty & reward ---
+    if total_weight == 0:
+        return {"allowed": False, "reason": "No valid weights"}
 
-# --- PATCH: pre-consensus penalty & reward ---
-def _adjust_weight(agent):
-    w = _adjust_weight(agent)
-    last = getattr(agent, "last_outcome", {}) or {}
+    score = positive_weight / total_weight
 
-    if last.get("policy_violation"):
-        w *= 0.5
-    if last.get("correct"):
-        w *= 1.15
+    return {
+        "allowed": score >= 0.5,
+        "score": score,
+        "total_weight": total_weight
+    }
 
-    return w
-# --- END PATCH ---
+
+def main():
+    print("🚀 Running Weighted Consensus...")
+
+    agent_votes = [
+        {"agent_id": "agent_1", "vote": True, "weight": 0.8},
+        {"agent_id": "agent_2", "vote": True, "weight": 0.6},
+        {"agent_id": "agent_3", "vote": False, "weight": 0.4},
+    ]
+
+    result = compute_weighted_consensus(agent_votes)
+
+    print("✅ Result:")
+    print(result)
+
+
+if __name__ == "__main__":
+    main()

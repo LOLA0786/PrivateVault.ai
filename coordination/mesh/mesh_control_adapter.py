@@ -1,3 +1,4 @@
+from pv_mesh_enforcer import enforce
 import uuid
 from datetime import datetime
 
@@ -50,6 +51,17 @@ class MeshControlAdapter:
             }
 
         try:
+            action = {
+                "tool": request.get("action", "unknown"),
+                "params": request
+            }
+            agent_chain = ["mesh", "executor"]
+
+            if not enforce(action, agent_chain):
+                return {
+                    "status": "BLOCK",
+                    "reason": "PRIVATEVAULT_BLOCKED"
+                }
             result = self._execute_core(request)
 
             return {

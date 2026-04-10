@@ -6,6 +6,10 @@ def real_execute(action: str):
     return {"status": "executed", "action": action}
 
 def execute_action(action: str):
+    from pv_runtime.execution_controller.controller import ExecutionController
+    controller = ExecutionController()
+    return controller.execute(agent_id, action)
+
     fw = firewall_check(action)
 
     if fw["decision"] == "BLOCK":

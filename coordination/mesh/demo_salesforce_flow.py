@@ -1,8 +1,8 @@
-from drift_aware_quorum import DriftAwareQuorum
-from trust_registry import TrustRegistry
-from decision_engine import MeshDecisionEngine
-from mesh_control_adapter import MeshControlAdapter
-from events import emit_event
+from coordination.mesh.drift_aware_quorum import DriftAwareQuorum
+from coordination.mesh.trust_registry import TrustRegistry
+from coordination.mesh.decision_engine import MeshDecisionEngine
+from coordination.mesh.mesh_control_adapter import MeshControlAdapter
+from coordination.mesh.events import emit_event
 
 print("\n=== PRIVATEVAULT SALESFORCE DEMO ===\n")
 

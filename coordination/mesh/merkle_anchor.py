@@ -1,4 +1,4 @@
-from merkle import MerkleTree
+from coordination.mesh.merkle import MerkleTree
 
 class MeshMerkleAnchor:
 

@@ -1,3 +1,6 @@
+from pv_runtime.policy.policy_versioning import PolicyVersioning
+policy_versions = PolicyVersioning()
+
 """
 Standalone-compatible policy engine wrapper.
 

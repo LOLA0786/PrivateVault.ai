@@ -1,7 +1,7 @@
-from drift_aware_quorum import DriftAwareQuorum
-from trust_registry import TrustRegistry
-from decision_engine import MeshDecisionEngine
-from agent_policy_engine import PolicyEngine
+from coordination.mesh.drift_aware_quorum import DriftAwareQuorum
+from coordination.mesh.trust_registry import TrustRegistry
+from coordination.mesh.decision_engine import MeshDecisionEngine
+from coordination.mesh.agent_policy_engine import PolicyEngine
 
 print("\n=== MULTI-AGENT CONFLICT DEMO (WITH EXPLANATION) ===\n")
 
