@@ -49,3 +49,31 @@ def execute_and_log(intent: dict):
         f.write(json.dumps(record) + "\n")
 
     return record
+
+# PrivateVault ExecutionOutcome closed-loop hook (additive - Prof. Veloso)
+from new_features.execution_outcome.execution_outcome import record_execution_outcome
+# Call this after any tool/action succeeds/fails
+
+
+# === CLOSED-LOOP INTEGRATION POINT (additive) ===
+from new_features.execution_outcome.closed_loop_wrapper import fire_closed_loop
+# Usage (1 line anywhere after action completes):
+# fire_closed_loop(intent_hash, {"success": True, "business_result": {...}, "metrics": {...}})
+
+# === ENTERPRISE CLOSED-LOOP INTEGRATION (additive only) ===
+from new_features.execution_outcome.enterprise import fire_closed_loop
+# After any tool / API / agent action completes:
+# fire_closed_loop(intent_hash, {
+#     "success": True,
+#     "business_result": {"tx_id": "...", "amount": 5000},
+#     "metrics": {"latency_ms": 1840}
+# })
+
+# === ENTERPRISE CLOSED-LOOP INTEGRATION (additive only - production ready) ===
+
+from new_features.execution_outcome.enterprise import fire_closed_loop
+
+# After any tool/API/action completes, add this ONE line:
+
+# fire_closed_loop(intent_hash, {"success": True, "business_result": {...}, "metrics": {...}})
+

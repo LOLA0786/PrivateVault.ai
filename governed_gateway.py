@@ -38,3 +38,15 @@ async def secure_optimize(req: OptimizationRequest):
         "optimized_value": optimized_val,
         "evidence_hash": auth_data.get("evidence_hash"),
     }
+
+# === CLOSED-LOOP INTEGRATION POINT (additive) ===
+from new_features.execution_outcome.closed_loop_wrapper import fire_closed_loop
+# Usage (1 line after action):
+# fire_closed_loop(intent_hash, outcome_data)
+
+# === ENTERPRISE CLOSED-LOOP INTEGRATION (additive only) ===
+
+from new_features.execution_outcome.enterprise import fire_closed_loop
+
+# After action: fire_closed_loop(intent_hash, outcome_data)
+
