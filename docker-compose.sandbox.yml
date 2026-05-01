@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+
+  sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile.sandbox
+    container_name: pv-sandbox
+    ports:
+      - "8765:8765"
+    environment:
+      - PV_MODE=sandbox
+      - PV_LOG_LEVEL=info
+    volumes:
+      - sandbox-ledger:/app/ledger
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - pv-sandbox-net
+
+  sandbox-ui:
+    image: nginx:alpine
+    container_name: pv-sandbox-ui
+    ports:
+      - "3000:80"
+    volumes:
+      - ./sandbox/ui:/usr/share/nginx/html:ro
+    depends_on:
+      - sandbox
+    networks:
+      - pv-sandbox-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: pv-sandbox-redis
+    ports:
+      - "6380:6379"
+    networks:
+      - pv-sandbox-net
+
+volumes:
+  sandbox-ledger:
+
+networks:
+  pv-sandbox-net:
+    driver: bridge

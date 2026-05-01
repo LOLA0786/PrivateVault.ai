@@ -111,3 +111,16 @@ if __name__ == "__main__":
     test_intent = {"action": "transfer_funds", "amount": 20000}
     result = execute(test_intent, "agent_1")
     print(result)
+
+# ---- PRIVATEVAULT PROOF HOOK ----
+from privatevault.runtime import generate_proof
+
+def attach_proof(result, raw_intent):
+    proof = generate_proof(
+        input_data=raw_intent,
+        model="pv-runtime",
+        temperature=0
+    )
+    result["proof"] = proof
+    return attach_proof(result, raw_intent)
+

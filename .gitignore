@@ -44,3 +44,23 @@ malicious_package_sim.py
 # Local runtime artifacts
 evidence.jsonl
 
+
+# Runtime trust state
+coordination/trust/trust_state.json
+
+# Build / temp
+build/
+dist/
+*.egg-info/
+.hypothesis/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+pv_events.log
+
+# Local env
+.env

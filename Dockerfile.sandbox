@@ -1,0 +1,12 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN pip install fastapi uvicorn httpx --break-system-packages 2>/dev/null || \
+    pip install fastapi uvicorn httpx
+
+COPY sandbox/sandbox_server.py .
+
+EXPOSE 8765
+
+CMD ["python", "sandbox_server.py"]

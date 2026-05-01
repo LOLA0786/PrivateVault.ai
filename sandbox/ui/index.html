@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PrivateVault Sandbox</title>
+  <style>
+    body { font-family: monospace; background: #0a0a0a; color: #00ff88; padding: 2rem; }
+    h1 { color: #fff; } input, select { background: #111; color: #0f0; border: 1px solid #333; padding: 6px; margin: 4px; }
+    button { background: #00ff88; color: #000; border: none; padding: 8px 16px; cursor: pointer; font-weight: bold; }
+    pre { background: #111; padding: 1rem; border-left: 3px solid #00ff88; overflow-x: auto; }
+    .BLOCK { color: #ff4444; } .ALLOW { color: #00ff88; } .REVIEW { color: #ffaa00; }
+  </style>
+</head>
+<body>
+  <h1>⚡ PrivateVault Sandbox</h1>
+  <div>
+    <input id="agent" value="agent-demo" placeholder="agent_id">
+    <input id="tool" value="send_email" placeholder="tool name">
+    <input id="args" value='{"to":"cfo@bank.com"}' placeholder='args JSON' style="width:300px">
+    <button onclick="check()">Check</button>
+  </div>
+  <pre id="out">Result will appear here...</pre>
+  <h3>Ledger</h3>
+  <pre id="ledger">—</pre>
+  <script>
+    const API = "http://localhost:8765";
+    async function check() {
+      const r = await fetch(`${API}/v1/enforce`, {
+        method: "POST", headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ agent_id: document.getElementById("agent").value,
+          tool: document.getElementById("tool").value,
+          args: JSON.parse(document.getElementById("args").value) })
+      });
+      const d = await r.json();
+      const el = document.getElementById("out");
+      el.textContent = JSON.stringify(d, null, 2);
+      el.className = d.decision;
+      loadLedger();
+    }
+    async function loadLedger() {
+      const r = await fetch(`${API}/v1/ledger`);
+      const d = await r.json();
+      document.getElementById("ledger").textContent = JSON.stringify(d.entries.slice(-5), null, 2);
+    }
+    loadLedger();
+  </script>
+</body>
+</html>
