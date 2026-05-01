@@ -64,3 +64,8 @@ pv_events.log
 
 # Local env
 .env
+*.scratch.json
+input.json
+output.json
+clean.json
+nohup.out
