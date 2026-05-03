@@ -1,12 +1,12 @@
-from pv_runtime.entrypoint import execute_action
-
-try:
-    from show_audit import build_audit
-except:
-    build_audit = None
-
-
 def evaluate(query, hydra_res):
+    # lazy import so pytest collection doesn’t break
+    from pv_runtime.entrypoint import execute_action
+
+    try:
+        from show_audit import build_audit
+    except Exception:
+        build_audit = None
+
     intent = {
         "action": "risk_assess",
         "recipient": "user",
@@ -25,6 +25,4 @@ def evaluate(query, hydra_res):
             "hash": audit.get("hash")
         }
 
-    return {
-        "result": result
-    }
+    return {"result": result}
