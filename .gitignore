@@ -69,3 +69,6 @@ input.json
 output.json
 clean.json
 nohup.out
+audit_*.json
+__pycache__/
+*.patch
