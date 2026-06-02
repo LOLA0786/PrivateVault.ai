@@ -113,7 +113,7 @@ if __name__ == "__main__":
     print(result)
 
 # ---- PRIVATEVAULT PROOF HOOK ----
-from privatevault.runtime import generate_proof
+from privatevault.proof_engine import generate_proof
 
 def attach_proof(result, raw_intent):
     proof = generate_proof(

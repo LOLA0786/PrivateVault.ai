@@ -1,5 +1,5 @@
 from pv_runtime.entrypoint import execute
-from privatevault.runtime import generate_proof
+from privatevault.proof_engine import generate_proof
 
 
 def proven_execute(raw_intent, agent_id="pv-cli"):
