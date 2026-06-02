@@ -10,6 +10,7 @@ from pv_runtime.rollback.rollback_engine import RollbackEngine
 from pv_runtime.idempotency.idempotency_store import IdempotencyStore
 from pv_runtime.event_store.event_store import EventStore
 from pv_runtime.locks.lock_manager import LockManager
+from pv_economics.events.outcome_event import build_outcome_event
 
 
 class ExecutionController:
@@ -56,6 +57,23 @@ class ExecutionController:
 
                 # EXECUTION
                 result = self._execute_action(action)
+
+                outcome = build_outcome_event(
+                    success=True,
+                    business_result={
+                        "action": action.get("action"),
+                        "business_value": 0
+                    },
+                    metrics={}
+                )
+
+                self.event_store.append_event(
+                    "EXECUTION_OUTCOME",
+                    {
+                        "agent": agent_id,
+                        "outcome": outcome.__dict__
+                    }
+                )
 
                 self.graph.record_outcome(agent_id, action, result)
 

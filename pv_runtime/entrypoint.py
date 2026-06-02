@@ -122,5 +122,5 @@ def attach_proof(result, raw_intent):
         temperature=0
     )
     result["proof"] = proof
-    return attach_proof(result, raw_intent)
+    return result
 

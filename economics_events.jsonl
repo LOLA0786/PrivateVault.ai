@@ -1,1 +1,2 @@
 {"timestamp": "2026-06-02T13:17:52.759379", "agent": "test-agent", "task": "refund", "cost_usd": 0.42, "success": true, "waste_score": 12, "roi_score": 3.5, "model": "gpt-test"}
+{"timestamp": "2026-06-02T13:55:32.684605", "agent": "support-agent", "task": "refund", "cost_usd": 2.0, "success": true, "business_value": 100.0, "roi_score": 50.0, "waste_score": 0}
