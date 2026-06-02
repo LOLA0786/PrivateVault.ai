@@ -6,6 +6,8 @@ from pv_cost_layer.metrics.cost_metrics import CostMetrics
 from pv_cost_layer.cache.decision_cache import DecisionCache
 from pv_cost_layer.policies.cost_policy import CostPolicy
 from pv_cost_layer.types import CostContext
+from pv_economics.collectors.economics_collector import EconomicsCollector
+from pv_economics.engines.waste_engine import WasteEngine
 
 
 class EnforcedDecisionWrapper:
@@ -22,6 +24,9 @@ class EnforcedDecisionWrapper:
         self._metrics = CostMetrics()
         self._policy = cost_policy
         self._cache = DecisionCache() if enable_cache else None
+
+        self._economics = EconomicsCollector()
+        self._waste = WasteEngine()
 
     def _cache_key(self, ctx: CostContext) -> str:
         return f"{ctx.input_tokens}:{ctx.output_tokens}:{ctx.risk_score}"
@@ -76,6 +81,55 @@ class EnforcedDecisionWrapper:
 
         # normal execution
         result = self._decision_fn(context)
+
+        waste_score = self._waste.evaluate(
+            retries=context.get(
+                "retries",
+                0
+            ),
+            input_tokens=input_tokens,
+            output_tokens=output_tokens
+        )
+
+        self._economics.record(
+            {
+                "agent":
+                    context.get(
+                        "agent",
+                        "unknown"
+                    ),
+
+                "task":
+                    context.get(
+                        "task",
+                        "unknown"
+                    ),
+
+                "cost_usd":
+                    estimate.total_cost,
+
+                "success":
+                    result.get(
+                        "success",
+                        True
+                    ) if isinstance(result, dict) else True,
+
+                "waste_score":
+                    waste_score,
+
+                "roi_score":
+                    0,
+
+                "model":
+                    routing.model,
+
+                "input_tokens":
+                    input_tokens,
+
+                "output_tokens":
+                    output_tokens
+            }
+        )
 
         if isinstance(result, dict):
             meta = result.setdefault("meta", {})
