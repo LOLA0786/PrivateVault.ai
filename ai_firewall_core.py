@@ -7,7 +7,9 @@ import re
 import json
 import hashlib
 import time
-from datetime import datetime, timezone
+from datetime import datetime
+from pv_economics.integrations.firewall_hook import emit_firewall_economics
+, timezone
 from typing import Dict, List, Any, Tuple
 import logging
 

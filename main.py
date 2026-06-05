@@ -4,6 +4,9 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pv_economics.api.economics_router import router as economics_router
+from pv_economics.integrations.firewall_hook import emit_firewall_economics
+
 from pydantic import BaseModel
 
 # --- CONFIGURATION ---
@@ -21,6 +24,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(economics_router)
+
 
 # --- DATA MODELS ---
 class TransactionRequest(BaseModel):
@@ -88,6 +93,12 @@ async def shadow_verify(request: TransactionRequest):
     
     # B. Run the Policy
     status, reason = check_policy(request)
+    emit_firewall_economics(
+        decision=status,
+        agent=request.agent_id,
+        action=request.action,
+        cost_usd=0.0001,
+    )
     
     # C. Log it (Simulating immutable audit log write)
     # In real deployment, this goes to CloudWatch or a Ledger
