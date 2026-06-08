@@ -1,0 +1,11 @@
+{
+  "transcript": {
+    "amount": "250000",
+    "bank": "HDFC",
+    "scammer_number": "9876543210"
+  },
+  "agent_output": {
+    "action": "freeze_account",
+    "account_number": "9821"
+  }
+}
