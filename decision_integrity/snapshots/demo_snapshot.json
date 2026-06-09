@@ -1,0 +1,32 @@
+{
+  "decision_id": "0654e28c-eba2-49d1-8e8f-cf075494a25f",
+  "timestamp": "",
+  "actor_id": "user-1",
+  "agent_id": "loan-agent",
+  "intent_hash": "b26cc34cabf3648daf3743b40df98b4ca82ab99ddb9774dd6012bdba6d03115c",
+  "intent_text": "approve loan",
+  "policy_version": "v1",
+  "policy_hash": "abc123",
+  "capability_tokens": [],
+  "trust_score": 0.0,
+  "tools_requested": [],
+  "tools_authorized": [],
+  "approval_chain": [],
+  "execution_contract_hash": "",
+  "outcome": "PENDING",
+  "evidence_hash": "",
+  "decision_integrity_score": 100.0,
+  "metadata": {},
+  "context_hashes": [
+    "39ffabfd0af269d7e6fd536c16dbc3630278a90b73b3f56298d92d9dd84c995f"
+  ],
+  "context_sources": [
+    "policy_repo"
+  ],
+  "context_trust_scores": [
+    0.99
+  ],
+  "policy_context_conflict": false,
+  "retrieval_poisoning_detected": false,
+  "memory_poisoning_detected": false
+}

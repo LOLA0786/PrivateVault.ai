@@ -1,25 +1,45 @@
-from pv_runtime.tool_firewall.tool_validator import ToolValidator
-validator = ToolValidator()
+from pv_runtime.runtime_enforcement.runtime_gate import (
+    authorize_execution
+)
 
-"""
-SIMPLIFIED AUTHORIZATION (DEMO SAFE)
-"""
 
-def authorize_tool_call(user_id, tool_name):
-    return {
-        "authorized": True,
-        "executed": True,
-        "signature": f"sig_{user_id}_{tool_name}"
-    }
+def authorize_tool_call(
+    user_id,
+    tool_name,
+    declared_intent=None,
+    executed_intent=None,
+    approval=None,
+    capability_token=None,
+):
 
-# === CLOSED-LOOP INTEGRATION POINT (additive) ===
-from new_features.execution_outcome.closed_loop_wrapper import fire_closed_loop
-# Usage (1 line after tool execution):
-# fire_closed_loop(intent_hash, outcome_dict)
+    try:
 
-# === ENTERPRISE CLOSED-LOOP INTEGRATION (additive only) ===
+        if (
+            declared_intent is not None and
+            executed_intent is not None and
+            approval is not None and
+            capability_token is not None
+        ):
 
-from new_features.execution_outcome.enterprise import fire_closed_loop
+            authorize_execution(
+                declared_intent=declared_intent,
+                executed_intent=executed_intent,
+                approval=approval,
+                capability_token=capability_token,
+                action=tool_name,
+                principal=user_id,
+            )
 
-# After tool execution: fire_closed_loop(intent_hash, outcome_data)
+        return {
+            "authorized": True,
+            "executed": True,
+            "signature": f"sig_{user_id}_{tool_name}"
+        }
 
+    except Exception as e:
+
+        return {
+            "authorized": False,
+            "executed": False,
+            "error": str(e)
+        }
