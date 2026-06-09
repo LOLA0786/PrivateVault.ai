@@ -33,3 +33,6 @@ pytest-asyncio
 pynacl
 deepdiff
 psutil
+PyNaCl>=1.5.0
+hypothesis
+redis>=5.0.0
