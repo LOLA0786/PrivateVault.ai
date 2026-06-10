@@ -8,9 +8,8 @@ import (
 )
 
 var (
-        // Injected by GoReleaser at build time
-        Version = "dev"
-        Commit = "none"
+        Version   = "dev"
+        Commit    = "none"
         BuildDate = "unknown"
 )
 
@@ -36,6 +35,5 @@ func Execute() error {
 
 func init() {
         rootCmd.AddCommand(versionCmd)
-        rootCmd.AddCommand(runCmd)
         rootCmd.AddCommand(completionCmd)
 }
