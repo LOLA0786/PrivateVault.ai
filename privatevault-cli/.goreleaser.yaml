@@ -12,27 +12,33 @@ builds:
     binary: privatevault
     env:
       - CGO_ENABLED=0
-    goos: [linux, darwin, windows]
-    goarch: [amd64, arm64]
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
     ldflags:
       - -s -w
-      - -X "main.version={{ .Version }}"
-      - -X "main.commit={{ .Commit }}"
-      - -X "main.date={{ .Date }}"
+      - -X github.com/LOLA0786/PrivateVault-Mega-Repo/privatevault-cli/cmd.Version={{ .Version }}
+      - -X github.com/LOLA0786/PrivateVault-Mega-Repo/privatevault-cli/cmd.Commit={{ .Commit }}
+      - -X github.com/LOLA0786/PrivateVault-Mega-Repo/privatevault-cli/cmd.BuildDate={{ .Date }}
 
 archives:
   - id: default
-    builds: [privatevault]
+    builds:
+      - privatevault
     format: binary
     name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
 
 checksum:
-  name_template: "checksums.txt"
+  name_template: checksums.txt
 
 release:
   github:
     owner: LOLA0786
-    name: PrivateVault-Mega-Repo
+    name: PrivateVault.ai
 
 brews:
   - name: privatevault
