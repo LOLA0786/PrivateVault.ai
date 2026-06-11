@@ -81,3 +81,8 @@ ci_test/
 # PrivateVault CLI binaries
 privatevault-cli/privatevault
 privatevault-cli/privatevault-cli
+
+# Runtime generated
+pii_runtime_ledger.jsonl
+privatevault-cli/privatevault-test
+/tmp/privatevault_audit.log
