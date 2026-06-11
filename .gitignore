@@ -75,3 +75,9 @@ __pycache__/
 pv_cost_layer/router/learning_store.json
 economics_events.jsonl
 pv_economics_store.db
+*.pre_*
+ci_test/
+
+# PrivateVault CLI binaries
+privatevault-cli/privatevault
+privatevault-cli/privatevault-cli
