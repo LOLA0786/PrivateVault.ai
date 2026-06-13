@@ -1,3 +1,8 @@
+
+from pv_runtime.adversarial.runtime_hook import (
+    evaluate_adversarial_risk
+)
+
 from pv_core.intent.intent_service import normalize
 from pv_core.context.context_service import build_context
 from pv_core.iam.iam_service import resolve_identity
@@ -23,6 +28,13 @@ from pv_core.risk.fast_risk import quick_score
 def execute(raw_intent, agent_id):
     intent = normalize(raw_intent, agent_id)
     trace = start_trace(agent_id, intent)
+
+    adversarial_result = evaluate_adversarial_risk(
+        history=[],
+        agent_chain=[agent_id]
+    )
+
+
 
     context = build_context(intent)
     identity = resolve_identity(agent_id)
@@ -81,7 +93,8 @@ def execute(raw_intent, agent_id):
         "approval": approval,
         "enforcement": enforcement,
         "execution": execution,
-        "trace": trace
+        "trace": trace,
+        "adversarial": adversarial_result
     }
 
     payload["replay"] = replay(payload)
