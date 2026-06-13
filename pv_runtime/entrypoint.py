@@ -3,6 +3,13 @@ from pv_runtime.adversarial.runtime_hook import (
     evaluate_adversarial_risk
 )
 
+from pv_runtime.adversarial.runtime_security_orchestrator import (
+    RuntimeSecurityOrchestrator
+)
+
+_runtime_security = RuntimeSecurityOrchestrator()
+
+
 from pv_core.intent.intent_service import normalize
 from pv_core.context.context_service import build_context
 from pv_core.iam.iam_service import resolve_identity
@@ -29,9 +36,17 @@ def execute(raw_intent, agent_id):
     intent = normalize(raw_intent, agent_id)
     trace = start_trace(agent_id, intent)
 
-    adversarial_result = evaluate_adversarial_risk(
+    runtime_security = _runtime_security.process(
+        principal=agent_id,
+        action=intent.get("action"),
+        text=str(intent),
         history=[],
         agent_chain=[agent_id]
+    )
+
+    adversarial_result = runtime_security.get(
+        "adversarial",
+        {}
     )
 
 
@@ -94,7 +109,8 @@ def execute(raw_intent, agent_id):
         "enforcement": enforcement,
         "execution": execution,
         "trace": trace,
-        "adversarial": adversarial_result
+        "adversarial": adversarial_result,
+        "runtime_security": runtime_security
     }
 
     payload["replay"] = replay(payload)

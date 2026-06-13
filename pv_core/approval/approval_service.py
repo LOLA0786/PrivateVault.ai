@@ -26,6 +26,15 @@ def request_approval(payload):
 
 
 def process(payload):
+
+    if adversarial_requires_approval(payload):
+
+        return {
+            "approval_required": True,
+            "status": "PENDING",
+            "reason": "ADVERSARIAL_ESCALATION"
+        }
+
     if requires_approval(
         payload.get("intent"),
         payload.get("risk", {}),
@@ -34,3 +43,20 @@ def process(payload):
         return request_approval(payload)
 
     return {"approval_required": False}
+
+def adversarial_requires_approval(payload):
+
+    runtime_security = payload.get(
+        "runtime_security",
+        {}
+    )
+
+    escalation = runtime_security.get(
+        "escalation",
+        {}
+    )
+
+    return escalation.get(
+        "requires_human",
+        False
+    )
