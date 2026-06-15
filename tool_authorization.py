@@ -1,4 +1,4 @@
-from pv_runtime.runtime_enforcement.runtime_gate import (
+from pv_runtime.adversarial.runtime_gate_wrapper import (
     authorize_execution
 )
 
@@ -21,7 +21,7 @@ def authorize_tool_call(
             capability_token is not None
         ):
 
-            authorize_execution(
+            authorize_execution_with_adversarial(
                 declared_intent=declared_intent,
                 executed_intent=executed_intent,
                 approval=approval,
