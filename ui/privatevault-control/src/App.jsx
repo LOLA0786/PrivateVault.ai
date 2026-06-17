@@ -1,24 +1,39 @@
-import StatusBar from "./components/StatusBar";
-import IntentTable from "./components/IntentTable";
-import ShadowImpactPanel from "./components/ShadowImpactPanel";
+import { useState } from 'react';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import MetricsBar from './components/MetricsBar';
+import DemosSection from './components/DemosSection';
+import MoatSection from './components/MoatSection';
+import IntentTable from './components/IntentTable';
+import ShadowImpactPanel from './components/ShadowImpactPanel';
+import Pricing from './components/Pricing';
+import BookDemo from './components/BookDemo';
+import Footer from './components/Footer';
 
 export default function App() {
+  const [dark, setDark] = useState(true);
+
   return (
     <div style={{
-      background: "#0f0f0f",
-      minHeight: "100vh",
-      color: "#ddd",
-      fontFamily: "system-ui, sans-serif"
+      background: dark ? 'var(--color-bg-base)' : '#f8fafc',
+      minHeight: '100vh',
+      color: dark ? 'var(--color-text-primary)' : '#0f172a',
+      fontFamily: 'var(--font-sans)',
+      display: 'flex', flexDirection: 'column',
+      transition: 'background 0.3s ease, color 0.3s ease',
     }}>
-      <StatusBar />
-
-      <div style={{ display: "flex" }}>
-        <div style={{ flex: 1 }}>
-          <IntentTable />
-        </div>
-
-        <ShadowImpactPanel />
+      <Navbar dark={dark} toggleTheme={() => setDark(d => !d)} />
+      <Hero />
+      <MetricsBar />
+      <DemosSection />
+      <MoatSection />
+      <div id='intents' style={{ flex: 1, display: 'flex', gap: 'var(--space-6)', padding: 'var(--space-8)', maxWidth: '1600px', width: '100%', margin: '0 auto', alignSelf: 'stretch' }}>
+        <div style={{ flex: 1, minWidth: 0 }}><IntentTable /></div>
+        <div style={{ width: '280px', flexShrink: 0 }}><ShadowImpactPanel /></div>
       </div>
+      <Pricing />
+      <BookDemo />
+      <Footer />
     </div>
   );
 }
