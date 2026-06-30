@@ -1,0 +1,17 @@
+.pv-blog { max-width: 720px; margin: 0 auto; padding: 96px 24px 140px; color: #16263b; font-family: Georgia, 'Times New Roman', serif; }
+.pv-blog__eyebrow, .pv-blog__date { font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, sans-serif; letter-spacing: .09em; text-transform: uppercase; font-size: 12px; font-weight: 600; color: #0d9488; }
+.pv-blog__head { border-bottom: 1px solid #e6ebf1; padding-bottom: 32px; margin-bottom: 40px; }
+.pv-blog__head h1 { font-size: 38px; line-height: 1.12; margin: 12px 0 14px; color: #0a1628; letter-spacing: -.01em; }
+.pv-blog__sub { color: #5b6b7d; font-size: 18px; line-height: 1.55; margin: 0; }
+.pv-blog__list { list-style: none; padding: 0; margin: 0; }
+.pv-blog__item { border-bottom: 1px solid #e6ebf1; }
+.pv-blog__item a { display: block; padding: 28px 0; text-decoration: none; color: inherit; }
+.pv-blog__item h2 { font-size: 24px; line-height: 1.2; margin: 8px 0 8px; color: #0a1628; }
+.pv-blog__item p { margin: 0; color: #5b6b7d; font-size: 17px; line-height: 1.5; }
+.pv-blog__item a:hover h2 { color: #0d9488; }
+.pv-blog--post .pv-blog__back { font-family: ui-sans-serif, -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #0d9488; text-decoration: none; }
+.pv-blog--post h1 { font-size: 34px; line-height: 1.15; margin: 10px 0 28px; color: #0a1628; letter-spacing: -.01em; }
+.pv-blog__body { font-size: 19px; line-height: 1.7; }
+.pv-blog__body h2 { font-family: ui-sans-serif, -apple-system, sans-serif; font-size: 22px; color: #0a1628; margin: 40px 0 14px; letter-spacing: -.01em; }
+.pv-blog__body p { margin: 0 0 22px; }
+.pv-blog__body a { color: #0d9488; }
