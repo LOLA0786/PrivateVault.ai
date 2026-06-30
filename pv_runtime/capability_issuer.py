@@ -1,14 +1,14 @@
 """
 PrivateVault Capability Issuer.
 
-Responsible for issuing short-lived execution capabilities.
-
-This module DOES NOT execute anything.
-It only creates execution capabilities.
+Issues runtime execution capabilities using the canonical JWT capability
+implementation.
 """
 
 import time
 import uuid
+
+from jwt_capability import issue_jwt_cap
 
 from pv_runtime.models.capability import Capability
 
@@ -22,15 +22,23 @@ def issue_capability(
     """
     Issue a runtime execution capability.
 
-    Future versions will replace the random token with a
-    cryptographically signed JWT capability.
+    The runtime model remains stable while the underlying token format
+    is delegated to jwt_capability.py.
     """
 
     issued = int(time.time())
 
+    decision_id = str(uuid.uuid4())
+
+    token = issue_jwt_cap(
+        decision_id=decision_id,
+        action=action,
+        principal=principal,
+    )
+
     return Capability(
-        token=str(uuid.uuid4()),
-        capability_id=str(uuid.uuid4()),
+        token=token,
+        capability_id=decision_id,
         principal=principal,
         action=action,
         issued_at=issued,
