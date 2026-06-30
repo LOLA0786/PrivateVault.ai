@@ -8,6 +8,8 @@ models. This module contains no execution logic.
 from pv_runtime.models.decision import Decision
 from pv_runtime.models.approval import Approval
 from pv_runtime.models.capability import Capability
+from dataclasses import replace
+
 from pv_runtime.models.runtime_context import RuntimeContext
 
 
@@ -84,3 +86,14 @@ def build_runtime_context(
         execution=execution or {},
         evidence=evidence or {},
     )
+
+def attach_capability(runtime_context, capability):
+    """
+    Return a new RuntimeContext with an attached capability.
+    """
+
+    return replace(
+        runtime_context,
+        capability=capability,
+    )
+
