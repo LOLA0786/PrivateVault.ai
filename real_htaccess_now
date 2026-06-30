@@ -1,0 +1,20 @@
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
+
+# --- LiteSpeed: do not cache HTML documents (forces fresh read from disk) ---
+<IfModule LiteSpeed>
+  CacheLookup off
+  RewriteRule .* - [E=Cache-Control:no-cache]
+</IfModule>
+
+# Serve static assets directly
+RewriteRule \.(js|css|svg|png|jpg|jpeg|gif|ico|woff2?|ttf|map|json)$ - [L]
+
+# If the request maps to a real file or directory, serve it as-is
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# SPA fallback for everything else
+RewriteRule ^ index.html [L]

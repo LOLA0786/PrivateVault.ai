@@ -24,6 +24,19 @@ class ExecutionController:
         self.event_store = EventStore()
         self.lock_manager = LockManager()
 
+    def execute_context(self, runtime_context):
+        """
+        Transitional API.
+
+        Accepts the new immutable RuntimeContext and delegates to the
+        existing execute() implementation.
+        """
+
+        return self.execute(
+            agent_id=runtime_context.agent_id,
+            action=dict(runtime_context.intent),
+        )
+
     def execute(self, agent_id: str, action: Dict[str, Any]) -> Dict[str, Any]:
 
         self.event_store.append_event(

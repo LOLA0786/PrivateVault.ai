@@ -1,6 +1,13 @@
 def evaluate(query, hydra_res):
-    # lazy import so pytest collection doesn’t break
-    from pv_runtime.entrypoint import execute_action
+    """
+    Compatibility wrapper for legacy callers.
+
+    NOTE:
+    The canonical runtime entrypoint is pv_runtime.entrypoint.execute().
+    This wrapper only adapts older code.
+    """
+
+    from pv_core.connectors.connector_service import execute_action
 
     try:
         from show_audit import build_audit
@@ -10,10 +17,14 @@ def evaluate(query, hydra_res):
     intent = {
         "action": "risk_assess",
         "recipient": "user",
-        "metadata": hydra_res
+        "metadata": hydra_res,
     }
 
-    decision = {"status": "ALLOW"}
+    # Canonical decision schema
+    decision = {
+        "allowed": True,
+        "reason": "legacy_wrapper",
+    }
 
     result = execute_action(intent, decision)
 
@@ -22,7 +33,9 @@ def evaluate(query, hydra_res):
         return {
             "result": result,
             "audit_id": audit.get("audit_id"),
-            "hash": audit.get("hash")
+            "hash": audit.get("hash"),
         }
 
-    return {"result": result}
+    return {
+        "result": result,
+    }

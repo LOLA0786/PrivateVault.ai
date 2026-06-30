@@ -1,0 +1,23 @@
+{
+  "total_decisions": 6,
+  "approved": 1,
+  "blocked": 4,
+  "escalated": 1,
+  "violations": {
+    "INCOME_DRIFT": 1,
+    "CREDIT_MEMO_FABRICATION": 1,
+    "SYNTHETIC_IDENTITY": 1,
+    "POLICY_VIOLATION": 1,
+    "NONE": 1,
+    "GROUP_EXPOSURE_BREACH": 1
+  },
+  "risk_scores": [
+    92,
+    88,
+    78,
+    85,
+    15,
+    94
+  ],
+  "average_risk_score": 75.33
+}

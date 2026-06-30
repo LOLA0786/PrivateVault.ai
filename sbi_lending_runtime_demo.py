@@ -3,6 +3,7 @@
 Regulatory thresholds/values are ILLUSTRATIVE. Verify vs current SBI credit
 policy + RBI Master Directions before any live banker/customer demo."""
 import hashlib, json, uuid, sys
+from pilot_reporting.decision_logger import append_decision
 from datetime import datetime, timezone
 
 class C:
@@ -60,6 +61,7 @@ def s1_income_hallucination():
     kv("FOIR @ verified income",f"{foir_pct(obl,e,vi/12)}%  (BREACH)",C.R)
     kv("Income source binding","NO SOURCE DOC HASH -> INCOME_DRIFT",C.R)
     kv("Drift magnitude",f"+{round((ai-vi)/vi*100)}% over evidence",C.R)
+    append_decision({"decision_id": str(uuid.uuid4()), "verdict": "BLOCK", "violation_type": "INCOME_DRIFT", "risk_score": 92})
     block("Underwriter income unsupported by filed evidence. FOIR on verified income breaches policy. Typology: INCOME INFLATION.")
     show_audit(audit_packet({"action":"loan_approval","pan":app["pan"],"verdict":"BLOCK"},["ITR_FY25:"+h({"inc":vi}),"Form26AS:"+h({"t":1}),"CIBIL:"+h({"s":cibil})]))
 
@@ -70,6 +72,7 @@ def s2_credit_memo_fabrication():
     stage("Runtime Control: Memo Citation Traceability")
     for c,s in [("DSCR 1.8x","NOT FOUND in uploaded financials"),("Collateral cover 1.4x","No valuation report on file"),("Strong cashflow","GSTR-3B shows 3 nil-filing months")]:kv(c,s,C.R)
     kv("Memo -> evidence hash match","FAILED (0/3 claims grounded)",C.R)
+    append_decision({"decision_id": str(uuid.uuid4()), "verdict": "BLOCK", "violation_type": "CREDIT_MEMO_FABRICATION", "risk_score": 88})
     block("Memo asserts metrics with no traceable source. Typology: CREDIT MEMO FABRICATION (ungrounded LLM justification).")
     show_audit(audit_packet({"action":"memo_approval","verdict":"BLOCK"},["GSTR3B:"+h({"nil":3}),"BankStmt:"+h({"bal":84000})]))
 
@@ -80,6 +83,7 @@ def s3_synthetic_identity_fraud():
     stage("Runtime Control: Multi-Source Cross-Validation")
     for k,v in [("Employer (EPFO vs slip)","MISMATCH - employer not in EPFO"),("Salary (slip vs bank credit)","MISMATCH - no matching credit"),("Bank credits (AA vs stmt)","MISMATCH - statement edited"),("CIBIL profile","THIN FILE - 2 enquiries in 7 days (velocity)")]:kv(k,v,C.R)
     kv("Composite Trust Score","41%",C.R)
+    append_decision({"decision_id": str(uuid.uuid4()), "verdict": "ESCALATE", "violation_type": "SYNTHETIC_IDENTITY", "risk_score": 78})
     escalate("Identity and income fail cross-source corroboration. Typology: SYNTHETIC IDENTITY / STATEMENT TAMPERING. Routed to fraud-control unit, not auto-rejected.")
     show_audit(audit_packet({"action":"loan_approval","verdict":"ESCALATE","trust":41},["EPFO:"+h({"f":False}),"AA:"+h({"edit":True})]))
 
@@ -89,6 +93,7 @@ def s4_policy_violation():
     stage("Runtime Control: Policy + Authority Matrix")
     kv("Current policy","NO INTEREST WAIVER (recovery policy v2026.1)",C.G);kv("Agent authority","Collections agent - NO waiver authority",C.R)
     kv("Attempted action","INTEREST WAIVER (100%)",C.R);kv("Authority check","DENIED - exceeds delegated powers",C.R)
+    append_decision({"decision_id": str(uuid.uuid4()), "verdict": "BLOCK", "violation_type": "POLICY_VIOLATION", "risk_score": 85})
     block("Action violates recovery policy and exceeds agent's delegated authority. Typology: POLICY OVERRIDE / UNAUTHORIZED CONCESSION.")
     show_audit(audit_packet({"action":"interest_waiver","verdict":"BLOCK"},["Policy:"+h({"w":False}),"Role:"+h({"auth":False})]))
 
@@ -103,6 +108,7 @@ def s5_clean_approval():
     kv("Computed EMI",inr(round(e))+"/mo");kv("FOIR",f"{foir}%  (<= {POLICY['max_foir_pct']}%)",C.G)
     kv("LTV",f"{ltv}%  (<= {POLICY['max_ltv_pct']}%)",C.G);kv("GST / Cashflow / Fraud","VERIFIED / VERIFIED / PASSED",C.G)
     kv("Single-borrower limit","within limit",C.G)
+    append_decision({"decision_id": str(uuid.uuid4()), "verdict": "APPROVE", "violation_type": "NONE", "risk_score": 15})
     approve()
     show_audit(audit_packet({"action":"loan_approval","verdict":"APPROVE","foir":foir,"ltv":ltv,"cibil":cibil,"risk":12},["ITR:"+h({"inc":vi}),"Val:"+h({"v":app["property_value"]}),"CIBIL:"+h({"s":cibil}),"GST:"+h({"ok":True})]))
 
@@ -116,6 +122,7 @@ def s6_group_exposure_breach():
     for n,a in related:kv(n,inr(a))
     kv("Aggregate group exposure",inr(total),C.R);kv("Group exposure limit",inr(POLICY["group_exposure_limit"]),C.Y)
     kv("Status","BREACH - each loan passes alone; sum exceeds limit",C.R)
+    append_decision({"decision_id": str(uuid.uuid4()), "verdict": "BLOCK", "violation_type": "GROUP_EXPOSURE_BREACH", "risk_score": 94})
     block("Connected entities individually within limit, aggregate breaches group exposure cap. Typology: EXPOSURE SPLITTING / DECOMPOSITION. This is the attack single-call enforcement misses.")
     show_audit(audit_packet({"action":"sanction","verdict":"BLOCK","total":total},["UBO:"+h({"linked":3}),"Exp:"+h({"t":total})]))
 

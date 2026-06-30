@@ -1,30 +1,49 @@
 """
-SAFE WRAPPER - CONNECTOR EXECUTION
+Canonical execution adapter.
+
+This module preserves the historical execute_action(intent, decision)
+API while routing execution through the enterprise ExecutionController.
+
+DO NOT execute tools directly from here.
 """
 
+from pv_runtime.execution_controller.controller import ExecutionController
+
+# Singleton controller for the process.
+_controller = ExecutionController()
+
+
 def execute_action(intent, decision):
-    if not decision.get("allowed"):
+    """
+    Legacy compatibility wrapper.
+
+    Parameters
+    ----------
+    intent : dict
+        Normalized intent.
+
+    decision : dict
+        Canonical decision object.
+        Expected:
+            {
+                "allowed": bool,
+                ...
+            }
+    """
+
+    if not decision.get("allowed", False):
         return {
             "executed": False,
-            "reason": "blocked_by_policy"
+            "reason": "blocked_by_policy",
         }
 
-    action = intent.get("action")
+    agent_id = (
+        intent.get("agent_id")
+        or intent.get("principal")
+        or "pv-runtime"
+    )
 
-    if action == "transfer_funds":
-        return {
-            "executed": True,
-            "status": "SUCCESS",
-            "transaction_id": "txn_12345"
-        }
-
-    if action == "get_weather":
-        return {
-            "executed": True,
-            "data": "sunny"
-        }
-
-    return {
-        "executed": True,
-        "status": "NO_OP"
-    }
+    return _controller.execute(
+        agent_id=agent_id,
+        action=intent,
+    )

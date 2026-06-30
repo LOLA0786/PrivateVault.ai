@@ -1,5 +1,5 @@
 from pv_runtime.adversarial.runtime_gate_wrapper import (
-    authorize_execution
+    authorize_execution_with_adversarial,
 )
 
 
@@ -11,16 +11,14 @@ def authorize_tool_call(
     approval=None,
     capability_token=None,
 ):
-
     try:
 
         if (
-            declared_intent is not None and
-            executed_intent is not None and
-            approval is not None and
-            capability_token is not None
+            declared_intent is not None
+            and executed_intent is not None
+            and approval is not None
+            and capability_token is not None
         ):
-
             authorize_execution_with_adversarial(
                 declared_intent=declared_intent,
                 executed_intent=executed_intent,
@@ -33,13 +31,12 @@ def authorize_tool_call(
         return {
             "authorized": True,
             "executed": True,
-            "signature": f"sig_{user_id}_{tool_name}"
+            "signature": f"sig_{user_id}_{tool_name}",
         }
 
     except Exception as e:
-
         return {
             "authorized": False,
             "executed": False,
-            "error": str(e)
+            "error": str(e),
         }
