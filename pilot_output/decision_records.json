@@ -1,0 +1,44 @@
+[
+  {
+    "decision_id": "b1f8444b-2d2a-432f-9cc9-00784f40d839",
+    "verdict": "BLOCK",
+    "violation_type": "INCOME_DRIFT",
+    "risk_score": 92
+  },
+  {
+    "decision_id": "b01176e9-9aba-4578-9939-41475af4980e",
+    "verdict": "BLOCK",
+    "violation_type": "CREDIT_MEMO_FABRICATION",
+    "risk_score": 88
+  },
+  {
+    "decision_id": "54a094a5-437d-477c-9640-06de12c96049",
+    "verdict": "ESCALATE",
+    "violation_type": "SYNTHETIC_IDENTITY",
+    "risk_score": 78
+  },
+  {
+    "decision_id": "cd068b0f-7e3e-4e12-b6d4-8d72bc5037de",
+    "verdict": "BLOCK",
+    "violation_type": "POLICY_VIOLATION",
+    "risk_score": 85
+  },
+  {
+    "decision_id": "1f78bd02-2a34-43d1-8f0c-52f4f1cb3040",
+    "verdict": "APPROVE",
+    "violation_type": "NONE",
+    "risk_score": 15
+  },
+  {
+    "decision_id": "4e7704c3-61a7-40a3-8e84-e0e232c162b1",
+    "verdict": "BLOCK",
+    "violation_type": "GROUP_EXPOSURE_BREACH",
+    "risk_score": 94
+  },
+  {
+    "decision_id": "426956ef-9061-4e6d-a7f4-14c84b2de9a1",
+    "verdict": "BLOCK",
+    "violation_type": "INCOME_DRIFT",
+    "risk_score": 92
+  }
+]
