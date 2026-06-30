@@ -30,6 +30,7 @@ from pv_core.siem.siem_service import process as siem_process
 
 from pv_core.runtime.latency_mode import FAST_MODE
 from pv_core.risk.fast_risk import quick_score
+from pv_runtime.adapters.runtime_adapter import build_runtime_context
 
 
 def execute(raw_intent, agent_id):
@@ -93,6 +94,19 @@ def execute(raw_intent, agent_id):
     enforcement = enforce(identity["user_id"], intent.get("action"))
     trace = add_step(trace, agent_id, "enforcement", "DONE")
 
+    runtime_context = build_runtime_context(
+        agent_id=agent_id,
+        identity=identity,
+        tenant=tenant,
+        intent=intent,
+        context=context,
+        simulation=simulation,
+        risk=risk,
+        decision=decision,
+        approval=approval,
+        runtime_security=runtime_security,
+    )
+
     execution = execute_action(intent, decision)
     trace = add_step(trace, agent_id, "execution", "DONE")
 
@@ -110,7 +124,8 @@ def execute(raw_intent, agent_id):
         "execution": execution,
         "trace": trace,
         "adversarial": adversarial_result,
-        "runtime_security": runtime_security
+        "runtime_security": runtime_security,
+        "runtime_context": runtime_context,
     }
 
     payload["replay"] = replay(payload)
