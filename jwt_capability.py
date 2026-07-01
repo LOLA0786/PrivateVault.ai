@@ -1,16 +1,27 @@
 import jwt
 import time
 import uuid
-import redis
+import os
 
-SECRET = "283ddef35a96af2c756690e2aab666f4c6ab83d824d8d9bea8c5ac8243764e7d"
-TTL = 300
-
-r = redis.Redis(
-    host="localhost",
-    port=6379,
-    decode_responses=True
+from pv_runtime.security.replay_provider import (
+    get_replay_store,
 )
+
+SECRET = os.getenv(
+    "PV_CAPABILITY_SECRET"
+)
+
+if SECRET is None:
+    raise RuntimeError(
+        "PV_CAPABILITY_SECRET is required."
+    )
+
+if len(SECRET.encode("utf-8")) < 32:
+    raise RuntimeError(
+        "PV_CAPABILITY_SECRET must be at least 32 bytes."
+    )
+
+TTL = 300
 
 
 def is_blacklisted(jti):
@@ -24,12 +35,11 @@ def record_replay_attempt(principal):
 def issue_jwt_cap(
     decision_id,
     action,
-    principal
+    principal,
 ):
-    jti = str(uuid.uuid4())
 
     payload = {
-        "jti": jti,
+        "jti": str(uuid.uuid4()),
         "decision_id": decision_id,
         "action": action,
         "principal": principal,
@@ -39,49 +49,49 @@ def issue_jwt_cap(
     return jwt.encode(
         payload,
         SECRET,
-        algorithm="HS256"
+        algorithm="HS256",
     )
 
 
 def verify_jwt_cap(
     token,
     action,
-    principal
+    principal,
 ):
+
     try:
+
         payload = jwt.decode(
             token,
             SECRET,
-            algorithms=["HS256"]
+            algorithms=["HS256"],
         )
 
     except Exception:
+
         raise Exception(
             "INVALID_CAPABILITY_TOKEN"
         )
 
+    if payload["action"] != action:
+        raise Exception("ACTION_MISMATCH")
+
+    if payload["principal"] != principal:
+        raise Exception("PRINCIPAL_MISMATCH")
+
     jti = payload["jti"]
 
     if is_blacklisted(jti):
-        raise Exception(
-            "TOKEN_BLACKLISTED"
-        )
+        raise Exception("TOKEN_BLACKLISTED")
 
-    if payload["action"] != action:
-        raise Exception(
-            "ACTION_MISMATCH"
-        )
-
-    if payload["principal"] != principal:
-        raise Exception(
-            "PRINCIPAL_MISMATCH"
-        )
+    replay = get_replay_store()
 
     key = f"used_jti:{jti}"
 
-    if r.exists(key):
+    if replay.exists(key):
+
         record_replay_attempt(
-            principal
+            principal,
         )
 
         raise Exception(
@@ -92,10 +102,9 @@ def verify_jwt_cap(
         payload["exp"] - time.time()
     )
 
-    r.setex(
+    replay.put(
         key,
         max(ttl, 1),
-        "1"
     )
 
     return payload
