@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ActionRequest",
+  "type": "object",
+  "required": [
+    "protocol_version",
+    "request_id",
+    "timestamp",
+    "principal",
+    "goal",
+    "proposed_action"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "principal": {
+      "type": "object"
+    },
+    "loop": {
+      "type": "object"
+    },
+    "goal": {
+      "type": "object"
+    },
+    "proposed_action": {
+      "type": "object"
+    },
+    "intent": {
+      "type": "object"
+    },
+    "graph_ref": {
+      "type": "object"
+    },
+    "limits": {
+      "type": "object"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}
