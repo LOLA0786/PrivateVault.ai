@@ -123,3 +123,59 @@ Executor
 - Cryptographically verifiable
 - Suitable for autonomous agent runtimes
 
+
+---
+
+# Decision Authority
+
+A Decision Authority is any runtime component responsible for evaluating
+proposed actions before execution and returning an authorization decision.
+
+The Decision Authority may enforce policy, validate intent, issue execution
+capabilities, record cryptographic evidence, and maintain execution context.
+
+The protocol intentionally does not require a specific implementation.
+
+PrivateVault is the reference implementation accompanying this draft, but
+any framework, runtime, or vendor may implement the protocol.
+
+---
+
+# Non-Goals
+
+Decision Runtime Protocol intentionally does not define:
+
+- Network transport (HTTP, gRPC, WebSocket, MQ, etc.)
+- Authentication or identity providers
+- Policy languages or rule engines
+- Workflow orchestration
+- Execution engines
+- Storage formats
+- Ledger implementations
+- Cryptographic algorithms
+- Runtime-specific economics models
+- Runtime-specific health calculations
+
+These concerns belong to individual implementations rather than the protocol
+itself.
+
+---
+
+# Reference Implementation
+
+This repository includes a reference implementation of the protocol within
+PrivateVault.
+
+The reference implementation demonstrates one possible Decision Authority,
+including:
+
+- Policy evaluation
+- Capability issuance
+- Cryptographic evidence generation
+- Decision receipts
+- Runtime integration
+
+The protocol specification remains independent of any implementation and is
+intended to support interoperability across agent runtimes and orchestration
+frameworks.
+
