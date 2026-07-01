@@ -23,6 +23,15 @@ class LoopEconomics:
     token_cost: float = 0.0
     tool_cost: float = 0.0
 
+    latency_ms: float = 0.0
+
+    input_tokens: int = 0
+    output_tokens: int = 0
+    used_tokens: int = 0
+
+    total_tool_calls: int = 0
+    useful_tool_calls: int = 0
+
     context_bytes: int = 0
     referenced_bytes: int = 0
     wasted_bytes: int = 0

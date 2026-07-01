@@ -86,6 +86,18 @@ class LoopEconomicsEngine:
 
             tool_cost=loop.economics.tool_cost,
 
+            latency_ms=latency_ms,
+
+            input_tokens=input_tokens,
+
+            output_tokens=0,
+
+            used_tokens=used_tokens,
+
+            total_tool_calls=total_tool_calls,
+
+            useful_tool_calls=useful_tool_calls,
+
             context_bytes=input_tokens,
 
             referenced_bytes=used_tokens,
