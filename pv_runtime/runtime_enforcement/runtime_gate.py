@@ -53,28 +53,51 @@ def authorize_execution(
     )
 
     if not result["passed"]:
-        raise Exception(
-            f"EAV_VERIFICATION_FAILED: {result}"
+        runtime_receipt = create_runtime_receipt(
+            result,
+            decision="REJECT",
+            reason="EAV_VERIFICATION_FAILED",
+        )
+        return {
+            "authorized": False,
+            "runtime_receipt": runtime_receipt,
+            "error": f"EAV_VERIFICATION_FAILED: {result}",
+        }
+
+    try:
+        assert_intent_binding(
+            declared_intent,
+            executed_intent,
         )
 
+        assert_approval_binding(
+            declared_intent,
+            approval,
+        )
+
+        verify_jwt_cap(
+            capability_token,
+            action,
+            principal,
+        )
+
+    except Exception as e:
+
+        runtime_receipt = create_runtime_receipt(
+            result,
+            decision="REJECT",
+            reason=str(e),
+        )
+
+        return {
+            "authorized": False,
+            "runtime_receipt": runtime_receipt,
+            "error": str(e),
+        }
+
     runtime_receipt = create_runtime_receipt(
-        result
-    )
-
-    assert_intent_binding(
-        declared_intent,
-        executed_intent,
-    )
-
-    assert_approval_binding(
-        declared_intent,
-        approval,
-    )
-
-    verify_jwt_cap(
-        capability_token,
-        action,
-        principal,
+        result,
+        decision="ALLOW",
     )
 
     return {
