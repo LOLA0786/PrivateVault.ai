@@ -14,22 +14,20 @@ def authorize_execution_with_adversarial(
     capability_token,
     action,
     principal,
+    evidence=None,
     payload=None,
 ):
-    """
-    Runtime authorization with optional adversarial validation.
-
-    Production runtime (entrypoint.py) can pass the full payload.
-
-    Lightweight callers and tests do not need to.
-    """
 
     if payload is not None:
         enforce_adversarial_risk(payload)
 
+    if evidence is None:
+        evidence = {}
+
     return authorize_execution(
         declared_intent=declared_intent,
         executed_intent=executed_intent,
+        evidence=evidence,
         approval=approval,
         capability_token=capability_token,
         action=action,

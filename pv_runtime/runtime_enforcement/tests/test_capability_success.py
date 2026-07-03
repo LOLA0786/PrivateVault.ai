@@ -4,6 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
+from jwt_capability import issue_jwt_cap
 from tool_authorization import authorize_tool_call
 from approval_binding import expected_approval_hash
 
@@ -17,6 +18,12 @@ intent = {
 approval = {
     "intent_hash": expected_approval_hash(intent)
 }
+
+token = issue_jwt_cap(
+    decision_id="decision-001",
+    action="process_payment",
+    principal="agent_001",
+)
 
 evidence = {
     "user_request": {
@@ -49,14 +56,13 @@ result = authorize_tool_call(
     declared_intent=intent,
     executed_intent=intent,
     approval=approval,
-    capability_token="totally_fake_token",
+    capability_token=token,
     evidence=evidence,
 )
 
-print("AUTHORIZED:", result["authorized"])
-print("EXECUTED:", result["executed"])
+print(result)
 
-if not result["authorized"]:
-    print("ERROR:", result["error"])
+assert result["authorized"]
+assert result["executed"]
 
 print("PASS")

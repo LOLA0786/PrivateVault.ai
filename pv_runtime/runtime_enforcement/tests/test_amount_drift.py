@@ -4,32 +4,46 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
+from jwt_capability import issue_jwt_cap
 from tool_authorization import authorize_tool_call
 from approval_binding import expected_approval_hash
 
-intent = {
+declared = {
     "action": "process_payment",
     "amount": 500,
     "recipient": "vendor-a",
     "currency": "USD",
 }
 
-approval = {
-    "intent_hash": expected_approval_hash(intent)
+executed = {
+    "action": "process_payment",
+    "amount": 5000,
+    "recipient": "vendor-a",
+    "currency": "USD",
 }
+
+approval = {
+    "intent_hash": expected_approval_hash(declared)
+}
+
+token = issue_jwt_cap(
+    decision_id="decision-002",
+    action="process_payment",
+    principal="agent_001",
+)
 
 evidence = {
     "user_request": {
-        "target": "vendor-a",
+        "canonical": "vendor-a",
         "amount": 500,
     },
     "planner_output": {
-        "target": "vendor-a",
+        "canonical": "vendor-a",
         "amount": 500,
     },
     "tool_parameters": {
-        "target": "vendor-a",
-        "amount": 500,
+        "canonical": "vendor-a",
+        "amount": 5000,
     },
     "enterprise_state": {
         "canonical": "vendor-a",
@@ -46,17 +60,15 @@ evidence = {
 result = authorize_tool_call(
     user_id="agent_001",
     tool_name="process_payment",
-    declared_intent=intent,
-    executed_intent=intent,
+    declared_intent=declared,
+    executed_intent=executed,
     approval=approval,
-    capability_token="totally_fake_token",
+    capability_token=token,
     evidence=evidence,
 )
 
-print("AUTHORIZED:", result["authorized"])
-print("EXECUTED:", result["executed"])
+print(result)
 
-if not result["authorized"]:
-    print("ERROR:", result["error"])
+assert result["authorized"] is False
 
 print("PASS")
