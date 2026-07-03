@@ -10,7 +10,9 @@ def authorize_tool_call(
     executed_intent=None,
     approval=None,
     capability_token=None,
+    evidence=None,
 ):
+
     try:
 
         if (
@@ -19,22 +21,26 @@ def authorize_tool_call(
             and approval is not None
             and capability_token is not None
         ):
-            authorize_execution_with_adversarial(
+
+            runtime_result = authorize_execution_with_adversarial(
                 declared_intent=declared_intent,
                 executed_intent=executed_intent,
                 approval=approval,
                 capability_token=capability_token,
                 action=tool_name,
                 principal=user_id,
+                evidence=evidence,
             )
 
-        return {
-            "authorized": True,
-            "executed": True,
-            "signature": f"sig_{user_id}_{tool_name}",
-        }
+            return {
+                "authorized": runtime_result["authorized"],
+                "executed": True,
+                "signature": f"sig_{user_id}_{tool_name}",
+                "runtime_receipt": runtime_result["runtime_receipt"],
+            }
 
     except Exception as e:
+
         return {
             "authorized": False,
             "executed": False,

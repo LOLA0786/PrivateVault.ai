@@ -1,45 +1,26 @@
-"""
-Canonical RuntimeContext model.
-
-Every privileged execution inside PrivateVault should eventually flow
-through this immutable object.
-"""
-
 from dataclasses import dataclass, field
-from typing import Any, Mapping
-from types import MappingProxyType
+from typing import Any, Dict, Optional
 
-from pv_runtime.models.approval import Approval
-from pv_runtime.models.capability import Capability
-from pv_runtime.models.decision import Decision
-
-
-_EMPTY = MappingProxyType({})
+from pv_runtime.models.evidence_bundle import (
+    EvidenceBundle,
+)
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass
 class RuntimeContext:
-    """
-    Immutable execution context.
-    """
 
-    agent_id: str
+    principal: Optional[str] = None
 
-    identity: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
-    tenant: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
+    action: Optional[str] = None
 
-    intent: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
-    context: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
+    declared_intent: Optional[Dict[str, Any]] = None
 
-    simulation: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
-    risk: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
+    executed_intent: Optional[Dict[str, Any]] = None
 
-    decision: Decision | None = None
-    approval: Approval | None = None
-    capability: Capability | None = None
+    approval: Optional[Dict[str, Any]] = None
 
-    runtime_security: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
+    capability_token: Optional[str] = None
 
-    execution: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
-
-    evidence: Mapping[str, Any] = field(default_factory=lambda: _EMPTY)
+    evidence: EvidenceBundle = field(
+        default_factory=EvidenceBundle
+    )

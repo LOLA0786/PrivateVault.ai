@@ -1,26 +1,13 @@
 """
 PrivateVault Authorization Service.
-
-This module is the single authorization entrypoint for privileged
-runtime execution.
-
-It performs authorization only.
-
-It does NOT execute tools.
 """
 
-from pv_runtime.runtime_enforcement.runtime_gate import (
-    authorize_execution,
-)
+from pv_runtime.runtime_enforcement.runtime_gate import authorize_execution
+
+from pv_runtime.models.evidence_bundle import EvidenceBundle
 
 
 def authorize(runtime_context):
-    """
-    Authorize execution for a RuntimeContext.
-
-    Raises an exception if authorization fails.
-    Returns True on success.
-    """
 
     decision = runtime_context.decision
 
@@ -40,12 +27,30 @@ def authorize(runtime_context):
     if capability is None:
         raise Exception("MISSING_CAPABILITY")
 
+    evidence = runtime_context.evidence
+
+    if not isinstance(evidence, EvidenceBundle):
+        evidence = EvidenceBundle()
+
+    evidence.user_request = dict(runtime_context.intent)
+
+    evidence.planner = dict(runtime_context.execution)
+
+    evidence.approval = {
+        "intent_hash": approval.intent_hash,
+    }
+
+    evidence.capability = {
+        "token": capability.token,
+        "action": capability.action,
+        "principal": capability.principal,
+    }
+
     authorize_execution(
-        declared_intent=dict(runtime_context.intent),
-        executed_intent=dict(runtime_context.intent),
-        approval={
-            "intent_hash": approval.intent_hash,
-        },
+        declared_intent=evidence.user_request,
+        executed_intent=evidence.planner,
+        evidence=evidence.to_dict(),
+        approval=evidence.approval,
         capability_token=capability.token,
         action=capability.action,
         principal=capability.principal,
