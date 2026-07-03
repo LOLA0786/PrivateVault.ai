@@ -32,10 +32,20 @@ def authorize_tool_call(
                 evidence=evidence,
             )
 
+            if not runtime_result["authorized"]:
+                return {
+                    "authorized": False,
+                    "executed": False,
+                    "runtime_receipt": runtime_result["runtime_receipt"],
+                    "error": runtime_result.get("error"),
+                }
+
+            signature = f"sig_{user_id}_{tool_name}"
+
             return {
-                "authorized": runtime_result["authorized"],
+                "authorized": True,
                 "executed": True,
-                "signature": f"sig_{user_id}_{tool_name}",
+                "signature": signature,
                 "runtime_receipt": runtime_result["runtime_receipt"],
             }
 
