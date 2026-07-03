@@ -1,0 +1,43 @@
+name: Runtime Enforcement CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+
+    env:
+      PV_CAPABILITY_SECRET: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+      PV_RECEIPT_SIGNING_KEY: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pynacl pyjwt pytest
+
+      - name: Compile runtime
+        run: |
+          python -m py_compile \
+            pv_runtime/runtime_enforcement/runtime_gate.py
+
+      - name: Run runtime demo
+        run: |
+          rm -f decision_receipts.log
+          python demos/demo_runtime_authorization.py
+
+      - name: Verify receipt chain
+        run: |
+          python verify_receipt_chain.py
+
+      - name: Run runtime tests
+        run: |
+          python -m pytest pv_runtime/runtime_enforcement/tests -q

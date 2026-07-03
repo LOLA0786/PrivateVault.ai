@@ -48,23 +48,31 @@ def authorize_execution(
         "evidence": evidence,
     }
 
-    result = EnterpriseActionVerifier().verify(
-        eav_action
-    )
-
-    if not result["passed"]:
-        runtime_receipt = create_runtime_receipt(
-            result,
-            decision="REJECT",
-            reason="EAV_VERIFICATION_FAILED",
-        )
-        return {
-            "authorized": False,
-            "runtime_receipt": runtime_receipt,
-            "error": f"EAV_VERIFICATION_FAILED: {result}",
-        }
-
     try:
+        jwt_payload = verify_jwt_cap(
+            capability_token,
+            action,
+            principal,
+        )
+
+        result = EnterpriseActionVerifier().verify(
+            eav_action
+        )
+
+        if not result["passed"]:
+            runtime_receipt = create_runtime_receipt(
+                result,
+                decision="REJECT",
+                reason="EAV_VERIFICATION_FAILED",
+                decision_id=jwt_payload["decision_id"],
+                jti=jwt_payload["jti"],
+            )
+            return {
+                "authorized": False,
+                "runtime_receipt": runtime_receipt,
+                "error": f"EAV_VERIFICATION_FAILED: {result}",
+            }
+
         assert_intent_binding(
             declared_intent,
             executed_intent,
@@ -75,18 +83,14 @@ def authorize_execution(
             approval,
         )
 
-        verify_jwt_cap(
-            capability_token,
-            action,
-            principal,
-        )
-
     except Exception as e:
 
         runtime_receipt = create_runtime_receipt(
-            result,
+            locals().get("result", {"passed": False}),
             decision="REJECT",
             reason=str(e),
+            decision_id=locals().get("jwt_payload", {}).get("decision_id"),
+            jti=locals().get("jwt_payload", {}).get("jti"),
         )
 
         return {
@@ -98,9 +102,12 @@ def authorize_execution(
     runtime_receipt = create_runtime_receipt(
         result,
         decision="ALLOW",
+        decision_id=jwt_payload["decision_id"],
+        jti=jwt_payload["jti"],
     )
 
     return {
         "authorized": True,
         "runtime_receipt": runtime_receipt,
     }
+
