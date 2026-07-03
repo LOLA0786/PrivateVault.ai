@@ -58,6 +58,7 @@ def sign_receipt(receipt):
     )
 
     return {
+        "algorithm": "Ed25519",
         "receipt_hash": digest,
         "signature": signature,
         "public_key": public_key(),
