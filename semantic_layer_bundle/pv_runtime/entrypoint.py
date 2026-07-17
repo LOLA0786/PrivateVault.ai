@@ -1,0 +1,170 @@
+
+from pv_runtime.adversarial.runtime_hook import (
+    evaluate_adversarial_risk
+)
+
+from pv_runtime.adversarial.runtime_security_orchestrator import (
+    RuntimeSecurityOrchestrator
+)
+
+_runtime_security = RuntimeSecurityOrchestrator()
+
+
+from pv_core.intent.intent_service import normalize
+from pv_core.context.context_service import build_context
+from pv_core.iam.iam_service import resolve_identity
+from pv_core.tenant.tenant_service import resolve_tenant
+from pv_core.simulation.simulator import run
+from pv_core.policy.policy_service import evaluate
+from pv_core.risk.risk_service import score
+from pv_core.enforcement.enforcement_service import enforce
+from pv_core.connectors.connector_service import execute_action
+from pv_core.audit.audit_service import log
+from pv_core.replay.replay_service import replay
+from pv_core.explainability.receipt_service import generate_receipt
+from pv_core.approval.approval_service import process as approval_process
+from pv_core.coordination.coordination_service import (
+    start_trace, add_step, finalize_trace
+)
+from pv_core.siem.siem_service import process as siem_process
+
+from pv_core.runtime.latency_mode import FAST_MODE
+from pv_core.risk.fast_risk import quick_score
+from pv_runtime.adapters.runtime_adapter import build_runtime_context
+
+
+def execute(raw_intent, agent_id):
+    intent = normalize(raw_intent, agent_id)
+    trace = start_trace(agent_id, intent)
+
+    runtime_security = _runtime_security.process(
+        principal=agent_id,
+        action=intent.get("action"),
+        text=str(intent),
+        history=[],
+        agent_chain=[agent_id]
+    )
+
+    adversarial_result = runtime_security.get(
+        "adversarial",
+        {}
+    )
+
+
+
+    context = build_context(intent)
+    identity = resolve_identity(agent_id)
+    tenant = resolve_tenant(identity)
+
+    # FAST vs FULL simulation
+    if FAST_MODE:
+        simulation = {"skipped": True, "mode": "fast"}
+    else:
+        simulation = run(intent)
+
+    trace = add_step(trace, agent_id, "simulation", "DONE")
+
+    # FAST vs FULL risk
+    if FAST_MODE:
+        risk = quick_score(intent)
+    else:
+        risk = score(intent, simulation)
+
+    trace = add_step(trace, agent_id, "risk_scoring", "DONE")
+
+    enriched_context = {
+        **context,
+        "simulation": simulation,
+        "risk": risk,
+        "tenant": tenant
+    }
+
+    decision = evaluate(intent, enriched_context)
+    trace = add_step(trace, agent_id, "policy_evaluation", "DONE")
+
+    approval = approval_process({
+        "intent": intent,
+        "risk": risk,
+        "decision": decision,
+        "tenant": tenant
+    })
+
+    trace = add_step(trace, agent_id, "approval_check", "DONE")
+
+    enforcement = enforce(identity["user_id"], intent.get("action"))
+    trace = add_step(trace, agent_id, "enforcement", "DONE")
+
+    runtime_context = build_runtime_context(
+        agent_id=agent_id,
+        identity=identity,
+        tenant=tenant,
+        intent=intent,
+        context=context,
+        simulation=simulation,
+        risk=risk,
+        decision=decision,
+        approval=approval,
+        runtime_security=runtime_security,
+    )
+
+    execution = execute_action(intent, decision)
+    trace = add_step(trace, agent_id, "execution", "DONE")
+
+    payload = {
+        "identity": identity,
+        "tenant": tenant,
+        "intent": intent,
+        "context": context,
+        "simulation": simulation,
+        "risk": risk,
+        "decision": decision,
+        "policy_snapshot": decision,
+        "approval": approval,
+        "enforcement": enforcement,
+        "execution": execution,
+        "trace": trace,
+        "adversarial": adversarial_result,
+        "runtime_security": runtime_security,
+        "runtime_context": runtime_context,
+    }
+
+    payload["replay"] = replay(payload)
+    payload["receipt"] = generate_receipt(payload)
+    payload["siem_event"] = siem_process(payload)
+
+    trace = finalize_trace(trace, decision)
+    payload["trace"] = trace
+
+    log(payload)
+
+    # 🔥 ASYNC BACKGROUND
+    if FAST_MODE:
+        import threading
+
+        def background_tasks(p):
+            sim = run(p["intent"])
+            deep_risk = score(p["intent"], sim)
+            print("[ASYNC] Deep analysis complete")
+
+        threading.Thread(target=background_tasks, args=(payload,)).start()
+
+    return payload
+
+
+if __name__ == "__main__":
+    test_intent = {"action": "transfer_funds", "amount": 20000}
+    result = execute(test_intent, "agent_1")
+    print(result)
+
+# ---- PRIVATEVAULT PROOF HOOK ----
+from privatevault.proof_engine import generate_proof
+
+def attach_proof(result, raw_intent):
+    proof = generate_proof(
+        input_data=raw_intent,
+        model="pv-runtime",
+        temperature=0
+    )
+    result["proof"] = proof
+    return result
+

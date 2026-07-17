@@ -1,0 +1,104 @@
+=== 1. Every file that touches the semantic layer ===
+./demos/demo_runtime_authorization.py
+./ledgers/worm_fallback.py
+./control_plane_api.py
+./tools/pv_verify.py
+./unstructured_intent_demo.py
+./unstructured_chaos_demo.py
+./intent_schema.py
+./tests/test_normalizer.py
+./tests/test_1m_wire_transfer.py
+./tests/regression/test_legaltech.py
+./tests/regression/test_verify.py
+./tests/regression/test_hardening.py
+./tests/regression/test_medtech.py
+./privatevault/__init__.py
+./privatevault/context/vault/signing.py
+./pv_core/intent/intent_service.py
+./pv_core/simulation/simulator.py
+./control_plane_normalize.py
+./src/galani/core/risk_engine.py
+./src/galani/core/policy_engine.py
+./src/galani/core/test_intent_engine_local.py
+./src/galani/compat/contracts.py
+./uaal_demo_gate.py
+./demo_all_in_one.py
+./coordination/mesh/mesh_control_adapter.py
+./services/api/routes/chat.py
+./services/api/governance/normalizer.py
+./quorum.py
+./test_unicode.py
+./pv_protocol/runtime/adapters/privatevault_adapter.py
+./examples/fintech/fintech_async_failover_demo.py
+./ui/demo-site/control_plane_api.py
+./ui/privatevault-control/control_plane_api.py
+./pv_runtime/runtime_enforcement/tests/test_object_drift.py
+./pv_runtime/runtime_enforcement/tests/test_receipt_signature.py
+./pv_runtime/runtime_enforcement/tests/test_amount_drift.py
+./pv_runtime/runtime_enforcement/tests/test_capability_block.py
+./pv_runtime/runtime_enforcement/tests/test_enterprise_state_violation.py
+./pv_runtime/runtime_enforcement/tests/test_capability_success.py
+./pv_runtime/runtime_enforcement/tests/test_replay_attack.py
+./pv_runtime/runtime_enforcement/tests/test_receipt_schema_v1.py
+./pv_runtime/__init__.py
+./pv_runtime/evidence/receipt_signer.py
+./pv_runtime/evidence/receipt_chain.py
+./pv_runtime/evidence/runtime_receipt.py
+./pv_runtime/capability_issuer.py
+./pv_runtime/runtime_context.py
+./pv_runtime/adversarial/storage/graph_recorder.py
+./pv_runtime/adversarial/storage/graph_store.py
+./pv_runtime/adversarial/runtime_hook.py
+./pv_runtime/adversarial/runtime_security_orchestrator.py
+./pv_runtime/adversarial/detectors/unicode_normalizer.py
+./pv_runtime/entrypoint.py
+./benchmarks/benchmark_eav.py
+
+=== 2. Where canonical values are PRODUCED (writes) vs CONSUMED (reads) ===
+pv_runtime/runtime_enforcement/tests/test_receipt_signature.py:19:    receipt["canonical_action"]["amount"] = 999999
+pv_runtime/evidence/receipt_signer.py:41:    canonical = json.dumps(
+pv_runtime/evidence/receipt_signer.py:78:    canonical = json.dumps(
+pv_runtime/evidence/receipt_chain.py:24:    canonical = json.dumps(
+
+=== 3. Interfaces of the core semantic files ===
+--- intent_schema.py ---
+8:class IntentCore(BaseModel):
+22:class IntentEnvelope(BaseModel):
+33:def normalize_intent(input_text: str) -> dict:
+--- intent_binding.py ---
+5:def canonical_hash(obj: dict) -> str:
+10:def assert_intent_binding(declared_intent: dict, executed_intent: dict):
+--- intent_hash.py ---
+5:def hash_payload(payload):
+--- signal_schema.py ---
+4:def canonical_signal_payload(signal: dict) -> bytes:
+--- control_plane_normalize.py ---
+1:def normalize_audit(entry):
+--- drift_detection_fixed.py ---
+13:class DriftDetector:
+14:    def __init__(self, threshold: float = 0.50):  # Lower threshold for better matches
+18:    def extract_keywords(self, text: str) -> List[str]:
+66:    def calculate_alignment_score(self, prompt: str, actions: List[Dict]) -> float:
+100:    def detect_drift(
+140:    def get_drift_events(self) -> List[Dict]:
+192:def detect_drift(expected, actual, threshold=0.2):
+--- unstructured_intent_demo.py ---
+10:def normalize_intent(unstructured_text):
+46:def evaluate_policy(intent):
+
+=== 4. The EAV / convergence engine itself ===
+pv_runtime/runtime_enforcement/tests/test_object_drift.py
+pv_runtime/runtime_enforcement/tests/test_receipt_signature.py
+pv_runtime/runtime_enforcement/tests/test_amount_drift.py
+pv_runtime/runtime_enforcement/tests/test_capability_block.py
+pv_runtime/runtime_enforcement/tests/test_enterprise_state_violation.py
+pv_runtime/runtime_enforcement/tests/test_capability_success.py
+pv_runtime/runtime_enforcement/tests/test_replay_attack.py
+pv_runtime/runtime_enforcement/tests/test_receipt_schema_v1.py
+pv_runtime/__init__.py
+pv_runtime/evidence/receipt_signer.py
+pv_runtime/evidence/receipt_chain.py
+pv_runtime/evidence/canonical.py
+pv_runtime/evidence/runtime_receipt.py
+pv_runtime/capability_issuer.py
+pv_runtime/runtime_context.py
