@@ -107,3 +107,4 @@ FETCH_HEAD
 agent-logic-test-results-*/
 # Runtime graph state
 intent_graph.db
+semantic_layer_bundle.tar.gz
